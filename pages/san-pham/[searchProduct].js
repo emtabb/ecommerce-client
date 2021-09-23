@@ -8,9 +8,9 @@ const ProductDetailPage = ({product, api}) => {
     return (
         <div className="bg-gray-100">
             <Head>
-                <meta name="image" content={api.concat(product.background)} />
+                <meta name="image" content={api.concat("/blob" + product.background)} />
                 <meta name="description" content={product.description} />
-                <meta property="og:image" content={api.concat(product.background)} />
+                <meta property="og:image" content={api.concat("/blob/" + product.background)} />
                 <meta property="og:image:type" content="image/jpeg" />
                 <meta property="og:image:width" content="400" />
                 <meta property="og:image:height" content="300" />
