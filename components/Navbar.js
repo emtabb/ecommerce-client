@@ -43,25 +43,24 @@ function Navbar() {
 
     const profile = {
         href: "/ca-nhan",
-        src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTF9LdKikLXJ-ihHzICuvot44oHXkr76gINWQ&usqp=CAU",
+        src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8xSMT8QD_BiRyZmT4MtLQePjffsgaA8FE0A&usqp=CAU",
         text: "Cá nhân"
     };
     return (
         <nav className="navbar navbar-expand navbar-light container-fluid justify-content-between shadow sticky-top">
-            <button type="button" id="sidebarCollapse" style={{width: "4.5rem"}}
-                    aria-expanded="false" aria-label="Toggle navigation"
-                    className="btn btn-success navbar-btn">
-                <i className="bi bi-list"/>
-                <span>Menu</span>
-            </button>
+            <a className="navbar-brand" href="#">
+                {/*< FigureComponent>*/}
+                <img src="/gnikecoffee.jpeg" style={{width: "3.5rem", height: "3.5rem"}}
+                     className="d-inline-block align-top rounded-circle" alt="Gnik E Coffee" />
+            </a>
             <ul className="navbar-nav" style={{right: 0}}>
                 {
                     navbarData.map(data => {
                         return (
-                            <li className="nav-item col-3 m-1" key={data.href}>
-                                <a className="badge badge-light" href={data.href} style={{width: "4.5rem"}}>
+                            <li className="nav-item mr-1" key={data.href}>
+                                <a className="badge badge-light" href={data.href}>
                                     <FigureComponent
-                                        style={{width: "3.5rem", height: "1.5rem"}}
+                                        style={{width: "3rem", height: "1.5rem"}}
                                         src={data.src}
                                         text={data.text}
                                         textColor={currentPath === data.href ? "text-primary" : "text-dark"}
@@ -76,9 +75,9 @@ function Navbar() {
                     })
                 }
             </ul>
-            <a className="badge badge-light" href={profile.href} style={{width: "4.5rem"}}>
+            <a className="badge badge-light" href={profile.href}>
                 <FigureComponent
-                    style={{width: "3.5rem", height: "1.5rem"}}
+                    style={{width: "3rem", height: "1.5rem"}}
                     src={profile.src}
                     text={profile.text}
                     textColor={currentPath === profile.href ? "text-primary" : "text-dark"}

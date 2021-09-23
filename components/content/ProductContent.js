@@ -1,34 +1,27 @@
 import React, {useEffect, useState} from 'react';
+import {ScrollMenu, VisibilityContext} from "react-horizontal-scrolling-menu";
 import axios from 'axios';
 
 import util from "../util/util";
 import constants from "../constants";
 import cartRequest from "../requests/cartRequests";
 import ListGroup from "react-bootstrap/ListGroup";
-import {Button} from "react-bootstrap";
+import {Badge, Button, Card} from "react-bootstrap";
 
 const {ACTION_ADD_TO_CART} = constants;
 
 function ProductContent(props) {
-    const {api} = props;
+    const {api, category} = props;
 
     const [products, setProducts] = useState([]);
     const [productsCategory, setProductsCategory] = useState([]);
-    const [next, setNext] = useState("");
-    const [scrolling, setScrolling] = useState(false);
     const [productsCart, setProductsCart] = useState([]);
-    const [observerSpace, setObserverSpace] = useState([]);
 
     useEffect(() => {
         setProducts(props.products);
         setProductsCategory(props.products);
-        setNext("");
-        setScrolling(false);
-        onInfiniteScroll().then().catch();
         return () => {
             setProducts([]);
-            setScrolling(false);
-            setNext("");
         }
     }, []);
 
@@ -42,45 +35,21 @@ function ProductContent(props) {
         return cart;
     }
 
-    async function onInfiniteScroll() {
-        window.addEventListener('scroll', async () => {
-            const {scrollTop, scrollHeight, clientHeight} = document.documentElement;
-            if (clientHeight + scrollTop >= scrollHeight - 2) {
-                if (scrolling) {
-                    return;
-                }
-                setScrolling(true)
-                await handleScrollLoadSpace();
-            }
-        });
-    }
-
-    async function handleScrollLoadSpace() {
-        if (next !== "") {
-            let url = `${api}/api/loadspace/product/${next}`
-            let response = await axios.get(url);
-            setObserverSpace([...observerSpace, ...await response.data.space]);
-            setNext(await response.data.next);
-            setScrolling(false);
-        }
-    }
-
     return (
         <div className="row">
             <div className="col-12 col-md-3 col-lg-3 mt-3">
-                <ProductCategory productsOrigin={products} productsCategory={productsCategory} setProductsCategory={setProductsCategory}/>
+                <ProductCategory categories={category} productsOrigin={products}
+                                 setProductsCategory={setProductsCategory}/>
             </div>
             <div className="mt-3 col-12 col-md-8 col-lg-8">
-                <div className="container-fluid">
-                    <div className="row">
-                        {productsCategory.map(product => {
-                            return (
-                                <ProductCard api={api} cartAction={handleAddProductToCart}
-                                             key={product._id}
-                                             product={product}/>
-                            )
-                        })}
-                    </div>
+                <div className="row">
+                    {productsCategory.map(product => {
+                        return (
+                            <ProductCard api={api} cartAction={handleAddProductToCart}
+                                         key={product._id}
+                                         product={product}/>
+                        )
+                    })}
                 </div>
             </div>
         </div>
@@ -90,24 +59,7 @@ function ProductContent(props) {
 
 function ProductCategory(props) {
 
-    const {productsOrigin, productsCategory, setProductsCategory} = props;
-
-    const categories = [{
-        key: "ALL",
-        name: "Tất cả"
-    }, {
-        key: "COFFE",
-        name: "Coffee"
-    }, {
-        key: "MAPPUCHINO",
-        name: "Đá xay"
-    }, {
-        key: "CAPPUCHINO",
-        name: "Cà phê ý"
-    }, {
-        key: "TEA",
-        name: "Trà"
-    }];
+    const {categories, productsOrigin, setProductsCategory} = props;
 
     function handleOnClickMenuItem(key) {
         setCategory(key);
@@ -115,7 +67,7 @@ function ProductCategory(props) {
             setProductsCategory(productsOrigin);
             return;
         }
-        let productsFilter = productsCategory.filter(product => product.category === key);
+        let productsFilter = productsOrigin.filter(product => product.category === key);
         setProductsCategory(productsFilter);
     }
 
@@ -142,22 +94,63 @@ function ProductCategory(props) {
         }
     }, []);
 
-    return (
-        <ListGroup horizontal={dimensions.width < 550} className="border shadow w-100">
-            {
-                categories.map(cate => (
-                    <ListGroup.Item key={cate.key}>
-                        <Button className="w-100 flex-fill"
-                                variant={cate.key === category ? "success" : "outline-success"}
+    if (dimensions.width < 650) {
+        return (
+            <Card className="form-inline col-auto d-inline-block shadow">
+                <ScrollMenu style={{height: "auto"}}>
+                    <h3>
+                    <Button
+                        className={"badge badge-pill m-2 p-3 " + ("ALL" === category ? "text-white" : "text-success")} key={"ALL"}
+                        variant={"ALL" === category ? "success" : "outline-success"}
+                        onClick={() => {
+                            handleOnClickMenuItem("ALL")
+                        }}
+                    > Tất cả </Button>
+                    </h3>
+                    {
+                        categories.map(cate => (
+                            <h3 key={cate.key}>
+                            <Button
+                                className={"badge badge-pill m-2 p-3 " + (cate.key === category ? "text-white" : "text-success")}
+                                variant={cate.key === category ?"success" : "outline-success"}
                                 onClick={() => {
                                     handleOnClickMenuItem(cate.key)
                                 }}
-                        > {cate.name} </Button>
-                    </ListGroup.Item>
-                ))
-            }
-        </ListGroup>
-    )
+                                style={{color : "green"}}
+                            > {cate.value}
+                            </Button>
+                            </h3>
+                        ))
+                    }
+                </ScrollMenu>
+            </Card>
+        )
+    } else {
+        return (
+            <ListGroup className="border shadow w-100">
+                <ListGroup.Item>
+                    <Button className="w-100 flex-fill"
+                            variant={"ALL" === category ? "success" : "outline-success"}
+                            onClick={() => {
+                                handleOnClickMenuItem("ALL")
+                            }}
+                    > Tất cả </Button>
+                </ListGroup.Item>
+                {
+                    categories.map(cate => (
+                        <ListGroup.Item key={cate.key}>
+                            <Button className="w-100 flex-fill"
+                                    variant={cate.key === category ? "success" : "outline-success"}
+                                    onClick={() => {
+                                        handleOnClickMenuItem(cate.key)
+                                    }}
+                            > {cate.value} </Button>
+                        </ListGroup.Item>
+                    ))
+                }
+            </ListGroup>
+        )
+    }
 }
 
 function ProductCard(props) {

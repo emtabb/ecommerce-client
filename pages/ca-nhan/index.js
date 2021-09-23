@@ -209,7 +209,7 @@ export default function PersonalInformation({api, SPACE_NAME}) {
                     <Navbar/>
                     <div className="container mt-5 mb-5">
                         <div className="row">
-                            <Card className="d-flex col-12 justify-content-center w-50" border="dark">
+                            <Card className="d-flex col-12 col-sm-6 justify-content-center" border="dark">
                                 <Card.Header>Anh/ chị chưa đăng nhập. Vui lòng đăng nhập để có trải nghiệm tốt hơn</Card.Header>
 
                                 <Card.Body>
@@ -243,7 +243,7 @@ export default function PersonalInformation({api, SPACE_NAME}) {
                                         </Button>
                                     </Form>
                                     <div className="line mt-5 mb-5"></div>
-
+                                    Hoặc đăng ký <a href="/dang-ky"> Tại đây</a>
                                 </Card.Body>
 
                             </Card>
