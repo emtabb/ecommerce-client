@@ -48,11 +48,14 @@ export default function Order({api}) {
                 <div className="container">
                     <div className="row">
                         {
-                            user.ott === true ?  (<div className="col-12">
-                                <h2><span className="badge badge-warning">Lưu ý!</span></h2>
-                                <p> Quý khách chưa đăng nhập tài khoản. do đó nếu tắt trình duyệt sẽ mất hiển thị đơn hàng.
-                                </p>
-                                <p>Vui lòng đăng nhập hoặc đăng ký để có trải nghiệm tốt hơn.</p>
+                            user.disabled === true ?  (<div className="col-12">
+                                <div className="alert alert-warning alert-dismissible fade show" role="alert">
+                                    <strong>Lưu ý</strong> Xin quý khách hãy <a href="/ca-nhan">đăng nhập </a>
+                                    tài khoản để theo dõi đơn hàng của mình một cách tốt nhất. Xin cảm ơn quý khách!
+                                    <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
                             </div> ) : (<></>)
                         }
 

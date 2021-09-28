@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import util from "../util/util";
 import {Button, Card, ListGroup, ListGroupItem} from "react-bootstrap";
+import LoadingPage from "../LoadingPage";
+import {ScrollMenu} from "react-horizontal-scrolling-menu";
 
 function mappingStatus(status) {
     let renderStatus = "";
@@ -31,78 +33,99 @@ export default function OrderContent(props) {
 
     const {orders, api} = props;
 
-    console.log(orders);
-
+    const [ordersFilter, setOrdersFilter] = useState([]);
+    const [loading, setLoading] = useState(false);
+    useEffect(() => {
+        setOrdersFilter(orders);
+        return () => {
+            setLoading(false);
+            setOrdersFilter([]);
+        };
+    }, []);
     return (
         <>
             <div className="col-12 col-md-3">
-                <OrderStatus />
+                <OrderStatus orders={orders} loading={loading} setLoading={setLoading}
+                             setOrdersFilter={setOrdersFilter}/>
             </div>
-            <div className="col-12 col-md-9">
-                {
-                    orders.map((order) => {
-                        return (
-                            <Card className='mb-3' key={order.outbox_code} style={{width: '100%'}}>
+            {
+                loading ? (<div className="col-12 col-md-6">
+                    {
+                        ordersFilter.map((order) => {
+                            return (
+                                <Card className='mb-3' key={order.outbox_code} style={{width: '100%'}}>
 
-                                <ListGroupItem>Trạng thái:
-                                    {mappingStatus(order.group_order[0].status)}
-                                </ListGroupItem>
-                                {
-                                    order.group_order[0].status === "CANCELLED" ? (
-                                        <Card.Body>
-                                            <Card.Title>Lý do hủy đơn hàng:</Card.Title>
-                                            <Card.Text>{order.group_order[0].reason}</Card.Text>
-                                        </Card.Body>
-                                    ) : <></>
-                                }
-                                <div className="line"/>
-                                {
-                                    order.group_order.map((data, idx) => {
-                                        return (
-                                            <div key={idx}>
-                                                <Card.Img variant="top"
-                                                          src={data.background !== "" ? api.concat(`/blob/${data.background}`) : ""}/>
-                                                <Card.Body>
-                                                    <Card.Title>{data.label}</Card.Title>
-                                                    <Card.Text>{data.notes}</Card.Text>
-                                                </Card.Body>
-                                                <ListGroup variant="flush">
-                                                    <ListGroupItem>Số lượng: {data.purchase}</ListGroupItem>
-                                                    <ListGroupItem>Thành tiền: {util.beautyNumber(data.promotion)} đ</ListGroupItem>
-                                                </ListGroup>
-                                                <div className="line"/>
-                                            </div>
-                                        )
-                                    })
-                                }
-                            </Card>
-                        )
-                    })
-                }
-            </div>
+                                    <ListGroupItem>Trạng thái:
+                                        {mappingStatus(order.status)}
+                                    </ListGroupItem>
+                                    {
+                                        order.status === "CANCELLED" ? (
+                                            <Card.Body>
+                                                <Card.Title>Lý do hủy đơn hàng:</Card.Title>
+                                                <Card.Text>{order.reason}</Card.Text>
+                                            </Card.Body>
+                                        ) : <></>
+                                    }
+                                    <div className="line"/>
+                                    {
+                                        order.group_order.map((data, idx) => {
+                                            return (
+                                                <div key={idx}>
+                                                    <Card.Img variant="top"
+                                                              style={{width: "100%", maxHeight: "20rem", objectFit: "contain"}}
+                                                              src={data.background !== "" ? api.concat(`/blob/${data.background}`) : ""}/>
+                                                    <Card.Body>
+                                                        <Card.Title>{data.label}</Card.Title>
+                                                        <Card.Text>{data.notes}</Card.Text>
+                                                    </Card.Body>
+                                                    <ListGroup variant="flush">
+                                                        <ListGroupItem>Số lượng: {data.purchase}</ListGroupItem>
+                                                        <ListGroupItem>
+                                                            <strong className="btn btn-info">Thành tiền: {util.beautyNumber(data.promotion)} đ
+                                                            </strong>
+                                                        </ListGroupItem>
+                                                    </ListGroup>
+                                                    <div className="line"/>
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                </Card>
+                            )
+                        })
+                    }
+                </div>) : (<LoadingPage/>)
+            }
         </>
     )
+
 }
 
 function OrderStatus(props) {
 
+    const {orders, setOrdersFilter, setLoading} = props;
+
     const categories = [{
-        key: "ALL",
-        name: "Tất cả"
-    }, {
         key: "WAITING",
-        name: "Đang chờ"
+        name: "Chờ xác nhận"
     }, {
         key: "APPROVED",
         name: "Đang làm"
     }, {
+        key: "DELIVERING",
+        name: "Đang giao hàng"
+    }, {
+        key: "COMPLETED",
+        name: "Đã hoàn tất",
+    }, {
         key: "CANCELLED",
         name: "Đã hủy"
     }, {
-        key: "COMPLETED",
-        name: "Đã hoàn tất"
+        key: "ALL",
+        name: "Tất cả"
     }]
-    const [category, setCategory] = useState("");
+
+    const [status, setStatus] = useState("ALL");
     const [dimensions, setDimensions] = useState({});
 
     function getWindowDimensions() {
@@ -113,33 +136,68 @@ function OrderStatus(props) {
         };
     }
 
+    function handleSetOrderFilter(key) {
+        setStatus(key);
+        if (key === "ALL") {
+            setOrdersFilter(orders);
+            return;
+        }
+        let ordersFilter = orders.filter(order => order.status === key);
+        setOrdersFilter(ordersFilter);
+    }
+
     useEffect(() => {
         function handleResize() {
             setDimensions(getWindowDimensions())
         }
 
-        setCategory("ALL");
+        handleSetOrderFilter("WAITING");
         window.addEventListener('resize', handleResize);
+        setLoading(true);
         return () => {
             window.removeEventListener('resize', handleResize);
+            setStatus("ALL");
+            setLoading(false);
         }
     }, []);
 
-    return (
-        <ListGroup horizontal={dimensions.width < 550} className="border shadow w-100">
-            {
-                categories.map(cate => (
-                    <ListGroup.Item key={cate.key}>
-                        <Button className="w-100 flex-fill"
-                                variant={cate.key === category ? "success" : "outline-success"}
+    if (dimensions.width < 550) {
+        return (
+            <div className="mb-2">
+            <ScrollMenu style={{height: "auto" }}>
+                {categories.map(cate => (
+                    <h5 key={cate.key}>
+                        <Button className={"badge badge-pill p-3 m-1 " + (cate.key === status ? "text-white" : "text-success")}
+                                variant={cate.key === status ? "success" : "outline-success"}
                                 onClick={() => {
-                                    setCategory(cate.key)
+                                    handleSetOrderFilter(cate.key)
                                 }}
+                                style={{color : "green"}}
                         > {cate.name} </Button>
-                    </ListGroup.Item>
-                ))
-            }
-        </ListGroup>
-    )
+                    </h5>
+                ))}
+            </ScrollMenu>
+            </div>
+        )
+    } else {
+
+        return (
+            <ListGroup className="border shadow w-100">
+                {
+                    categories.map(cate => (
+                        <ListGroup.Item key={cate.key}>
+                            <Button className="w-100 flex-fill"
+                                    variant={cate.key === status ? "success" : "outline-success"}
+                                    onClick={() => {
+                                        handleSetOrderFilter(cate.key)
+                                    }}
+                            > {cate.name} </Button>
+                        </ListGroup.Item>
+                    ))
+                }
+            </ListGroup>
+        )
+    }
+
 }
 

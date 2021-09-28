@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Card, ListGroup, ListGroupItem, Button, Form } from 'react-bootstrap';
+import React, {useState, useEffect} from 'react';
+import {Card, ListGroup, ListGroupItem, Button, Form, Row, Col, InputGroup} from 'react-bootstrap';
 import requests from '../requests';
 import constants from "../constants"
 
@@ -8,13 +8,13 @@ import util from "../util/util";
 import cartRequest from "../requests/cartRequests";
 import userRequest from "../requests/userRequests";
 
-const { ACTION_ADD_TO_CART, ACTION_REMOVE_FROM_CART, ACTION_CLEAR_CART, ACTION_GET_CART, ACTION_UPDATE_ITEM_CART } = constants;
-const { ACTION_GET_USER_INFORMATION, ACTION_SET_USER_INFORMATION, ACTION_UPDATE_USER_INFORMATION, ACTION_DELETE_USER_INFORMATION, ACCESS_TOKEN } = constants;
+const {ACTION_ADD_TO_CART, ACTION_REMOVE_FROM_CART, ACTION_CLEAR_CART, ACTION_GET_CART, ACTION_UPDATE_ITEM_CART} = constants;
+const {ACTION_GET_USER_INFORMATION, ACTION_SET_USER_INFORMATION, ACTION_UPDATE_USER_INFORMATION, ACTION_DELETE_USER_INFORMATION, ACCESS_TOKEN} = constants;
 
 function getUser() {
     let payload = {
         action: ACTION_GET_USER_INFORMATION,
-        data  : {}
+        data: {}
     };
     let user = userRequest(payload)
     if (user === undefined) {
@@ -26,14 +26,14 @@ function getUser() {
 function setUser(userData) {
     let payload = {
         action: ACTION_SET_USER_INFORMATION,
-        data  : userData
+        data: userData
     }
     return userRequest(payload);
 }
 
 const CartContent = (props) => {
 
-    const { api, space } = props;
+    const {api, space} = props;
     const CHOOSE_ALL_TEXT_INFO = "Chọn tất cả";
     const CANCEL_ALL_TEXT_INFO = "Hủy chọn tất cả";
 
@@ -117,7 +117,7 @@ const CartContent = (props) => {
 
         if (!user.isLogin) {
             let loginUser = {
-                space : space,
+                space: space,
                 user_sso: user.user_sso,
                 location: user.location,
             }
@@ -126,19 +126,20 @@ const CartContent = (props) => {
             if (generateShortTermAccessToken.message !== "FAIL") {
                 console.log(generateShortTermAccessToken);
                 let access_token = generateShortTermAccessToken.token.access_token;
-                let dataUserLoginPayload = {
-                    user_sso: generateShortTermAccessToken.token.user_sso,
-                    location: generateShortTermAccessToken.token.location,
-                    isLogin : true,
-                    ott     : true,
-                }
-                console.log(dataUserLoginPayload);
                 requests.setSessionStorage(ACCESS_TOKEN, access_token);
-                let payloadShortUserLogin = {
-                    action: ACTION_SET_USER_INFORMATION,
-                    data  : dataUserLoginPayload
+                let userResponse = await requests.getData(api.concat("/api/user/sso"), constants.ACCESS_TOKEN);
+                if (userResponse.message === "SUCCESS") {
+                    let userResponseData = userResponse.data;
+                    userResponseData.isLogin = true;
+                    let payloadShortUserLogin = {
+                        action: ACTION_SET_USER_INFORMATION,
+                        data: userResponseData
+                    }
+                    setUser(userRequest(payloadShortUserLogin));
+                } else {
+                    alert("Tạo đơn hàng thất bại");
+                    return;
                 }
-                setUser(userRequest(payloadShortUserLogin));
             }
         }
 
@@ -158,10 +159,10 @@ const CartContent = (props) => {
                     setCartData(removeFromCart(cartSelected[i]));
                 }
                 alert("Đặt hàng thành công");
-                window.location.href="/don-hang"
+                window.location.href = "/don-hang"
             } else {
                 alert("Đặt hàng thất bại");
-                window.location.href="/don-hang"
+                window.location.href = "/don-hang"
             }
         } else {
             alert("Xin vui lòng kiểm tra lại thông tin");
@@ -172,7 +173,7 @@ const CartContent = (props) => {
     if (cartData.length === 0 || !Array.isArray(cartData)) {
         return (
             <div className="row">
-                <Card className="col-xs-12 col-12 col-md-8 p-3" style={{ minHeight: '18rem' }}>
+                <Card className="col-xs-12 col-12 col-md-8 p-3" style={{minHeight: '18rem'}}>
                     Không có sản phẩm trong giỏ hàng
                 </Card>
             </div>
@@ -185,17 +186,20 @@ const CartContent = (props) => {
                         {
                             chooseOption ? (
                                 <div className="col-3">
-                                    <Button className="ml-3 mr-3 w-100" onClick={cancelChooseAll} variant="secondary">{CANCEL_ALL_TEXT_INFO}</Button>
+                                    <Button className="badge ml-3 mr-3 w-100" onClick={cancelChooseAll}
+                                            variant="secondary">{CANCEL_ALL_TEXT_INFO}</Button>
                                 </div>
 
                             ) : (
-                                    <div className="col-3">
-                                        <Button className="ml-3 mr-3 w-100" onClick={chooseAll} variant="info"> {CHOOSE_ALL_TEXT_INFO} </Button>
-                                    </div>
-                                )
+                                <div className="col-3">
+                                    <Button className="badge ml-3 mr-3 w-100" onClick={chooseAll}
+                                            variant="info"> {CHOOSE_ALL_TEXT_INFO} </Button>
+                                </div>
+                            )
                         }
                         <div className="col-3">
-                            <Button className="ml-3 mr-3 w-100" onClick={clearCart} variant="danger">Xóa toàn bộ.</Button>
+                            <Button className="badge ml-3 mr-3 w-100" onClick={clearCart} variant="danger">Xóa toàn
+                                bộ.</Button>
                         </div>
                     </div>
                 </div>
@@ -203,11 +207,11 @@ const CartContent = (props) => {
                 <div className="col-xs-12 col-12 col-md-6">
                     <h1 className="w-100"><span className="badge badge-secondary w-100">Thông tin đơn hàng</span></h1>
                     {cartData.map(product =>
-                        <CartItem key={product.index} api={api} actionCart={setCartData} product={product} />
+                        <CartItem key={product.index} api={api} actionCart={setCartData} product={product}/>
                     )}
                 </div>
 
-                <RightNavigation user={user} setUser={setUser} cartData={cartData} sendRequest={sendRequest} />
+                <RightNavigation user={user} setUser={setUser} cartData={cartData} sendRequest={sendRequest}/>
 
             </div>
         )
@@ -215,7 +219,7 @@ const CartContent = (props) => {
 }
 
 const RightNavigation = (props) => {
-    const { cartData, sendRequest, user, setUser } = props;
+    const {cartData, sendRequest, user, setUser} = props;
     let totalPrice = 0;
 
     function calculate() {
@@ -227,19 +231,21 @@ const RightNavigation = (props) => {
         })
         return totalCalculate;
     }
+
     totalPrice = calculate();
 
     return (
         <div className="col-xs-12 col-12 col-md-6">
-            <Card className="p-3 shadow w-100 mb-3" style={{ width: '18rem' }}>
-            <h1 className="mb-5"><span className="badge badge-warning text-white w-100"> Thông tin khách hàng </span></h1>
-                <Location userInformation={user} setUserInformation={setUser} />
+            <Card className="p-3 shadow w-100 mb-3" style={{width: '18rem'}}>
+                <h1 className="mb-5"><span
+                    className="badge badge-warning text-white w-100"> Thông tin khách hàng </span></h1>
+                <Location userInformation={user} setUserInformation={setUser}/>
                 <div className="line"></div>
                 <div className="input-group mt-4 mb-4">
                     <div className="input-group-prepend">
                         <span className="input-group-text">Thành Tiền: </span>
                     </div>
-                    <input className="form-control" type="text" value={util.beautyNumber(totalPrice)} readOnly />
+                    <input className="form-control" type="text" value={util.beautyNumber(totalPrice)} readOnly/>
                     <div className="input-group-append">
                         <span className="input-group-text"> đ</span>
                     </div>
@@ -292,7 +298,8 @@ const Location = (props) => {
         <div>
             <div className="form-group">
                 <label>Địa chỉ giao hàng <span className="text-danger">*</span></label>
-                <input id="locationValidationFocus" type="text" className="form-control" value={location} onChange={onChangeLocation} placeholder="Vui lòng nhập địa chỉ giao hàng" />
+                <input id="locationValidationFocus" type="text" className="form-control" value={location}
+                       onChange={onChangeLocation} placeholder="Vui lòng nhập địa chỉ giao hàng"/>
             </div>
 
             <label>Số điện thoại <span className="text-danger">*</span></label>
@@ -300,14 +307,15 @@ const Location = (props) => {
                 <div className="input-group-prepend">
                     <span className="input-group-text">+84</span>
                 </div>
-                <input id="numberPhoneValidationFocus" className="form-control" type="text" value={userSso} onChange={onChangePhoneNumber} placeholder="Vui lòng nhập số điện thoại liên lạc" />
+                <input id="numberPhoneValidationFocus" className="form-control" type="text" value={userSso}
+                       onChange={onChangePhoneNumber} placeholder="Vui lòng nhập số điện thoại liên lạc"/>
             </div>
         </div>
     )
 }
 
 const CartItem = (props) => {
-    const { product, api, actionCart } = props;
+    const {product, api, actionCart} = props;
 
     if (product.selected === undefined) {
         product.selected = false;
@@ -355,16 +363,17 @@ const CartItem = (props) => {
     }
 
     return (
-        <Card className="p-3 shadow w-100 mb-3" style={{ width: '18rem' }}>
+        <Card className="p-3 shadow w-100 mb-3" style={{width: '18rem'}}>
 
             <div className="form-check mb-3 w-100">
                 <input className="form-check-input"
-                    style={{ width: "1.6rem", height: "1.6rem" }}
-                    type="checkbox" checked={product.selected} onClick={updateAddToPayment} />
-                <label className="form-check-label" htmlFor="autoSizingCheck"/>
+                       style={{width: "1.6rem", height: "1.6rem"}}
+                       type="checkbox" checked={product.selected} onClick={updateAddToPayment}/>
+                <label className="mt-2 ml-3 form-check-label text-muted" htmlFor="autoSizingCheck">Check vào sản phẩm
+                    muốn mua</label>
             </div>
 
-            <Card.Img variant="top" src={background} />
+            <Card.Img variant="top" src={background}/>
             <Card.Body>
                 <Card.Title>{product.label}</Card.Title>
             </Card.Body>
@@ -374,7 +383,8 @@ const CartItem = (props) => {
                         <div className="input-group-prepend">
                             <span className="input-group-text">Số lượng:</span>
                         </div>
-                        <input type="number" onChange={updateProductPurchase} value={product.purchase} className="form-control" />
+                        <input type="number" onChange={updateProductPurchase} value={product.purchase}
+                               className="form-control"/>
                     </div>
                 </ListGroupItem>
                 <ListGroupItem>
@@ -382,25 +392,103 @@ const CartItem = (props) => {
                         <div className="input-group-prepend">
                             <span className="input-group-text">Giá tiền: </span>
                         </div>
-                        <input className="form-control" type="text" onChange={updateProductPurchase} value={util.beautyNumber(product.promotion * product.purchase)} readOnly />
+                        <input className="form-control" type="text" onChange={updateProductPurchase}
+                               value={util.beautyNumber(product.promotion * product.purchase)} readOnly/>
                         <div className="input-group-append">
                             <span className="input-group-text"> đ</span>
                         </div>
                     </div>
                 </ListGroupItem>
                 <ListGroupItem>
-                    <label >Ghi chú: </label>
-                    <textarea className="form-control" type="text" onChange={updateNotes} value={product.notes} />
+                    <label>Ghi chú: </label>
+                    <textarea className="form-control" type="text" onChange={updateNotes} value={product.notes}/>
                 </ListGroupItem>
                 <ListGroupItem>
                     <div className="form-row align-items-center mt-2">
                         <div className="col-auto">
-                            <Button className="teal-500" variant="outline-danger" onClick={removeProductFromCart}>Xóa Khỏi Giỏ Hàng</Button>
+                            <Button className="teal-500" variant="outline-danger" onClick={removeProductFromCart}>Xóa
+                                Khỏi Giỏ Hàng</Button>
                         </div>
                     </div>
                 </ListGroupItem>
             </ListGroup>
         </Card>
+    )
+}
+
+function ModalCartLogin(props) {
+
+    const {api} = props;
+
+    const [numberPhoneLogin, setNumberPhoneLogin] = useState("");
+    const [passwordLogin, setPasswordLogin] = useState("");
+    async function handleSignInAccount() {
+        const requestLogin = {
+            username: numberPhoneLogin,
+            password: passwordLogin,
+        }
+        let responseData = await requests.postData(api.concat("/verify/login"), requestLogin, constants.ACCESS_TOKEN);
+        if (responseData.access_token) {
+            requests.setSessionStorage(constants.ACCESS_TOKEN, responseData[constants.ACCESS_TOKEN]);
+            requests.setSessionStorage(constants.USER_SSO, responseData[constants.USER_SSO]);
+            let userResponse = await requests.getData(api.concat("/api/user/sso"), constants.ACCESS_TOKEN);
+            let userResponseData = userResponse.data;
+            userResponseData.isLogin = true;
+            setUser(userResponseData);
+            window.location.href = "/ca-nhan";
+        }
+    }
+    useEffect(() => {
+
+        return () => {
+
+        }
+    }, [])
+    return (
+        <div>
+            <button type="button" className="btn btn-primary d-none" data-toggle="modal" data-target="#modalSignInDefault">
+
+            </button>
+
+            <div className="modal fade" id="modalSignInDefault" role="dialog" aria-hidden="true">
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">Hệ thống ghi nhận số điện thoại đã được đăng ký, vui lòng đăng nhập để tiếp tục đặt hàng</h5>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="false">&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <Row className="mb-3">
+
+                                <Form.Group as={Col}>
+                                    <Form.Label>Số điện thoại</Form.Label>
+                                    <InputGroup>
+                                        <InputGroup.Text>+84</InputGroup.Text>
+                                        <Form.Control onChange={(event) => {
+                                            setNumberPhoneLogin(event.target.value)
+                                        }}
+                                                      type="text" placeholder="..."/>
+                                    </InputGroup>
+                                </Form.Group>
+                            </Row>
+
+                            <Form.Group className="mb-3">
+                                <Form.Label>Mật khẩu</Form.Label>
+                                <Form.Control id="passwordLoginId" onChange={(event) => {
+                                    setPasswordLogin(event.target.value)
+                                }}
+                                              type="password" placeholder="..."/>
+                            </Form.Group>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-primary" onClick={handleSignInAccount}>Đăng nhập</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     )
 }
 

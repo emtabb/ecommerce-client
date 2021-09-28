@@ -4,7 +4,7 @@ import React, {useEffect, useState} from "react";
 import util from "../../components/util/util";
 import requests from "../../components/requests";
 import constants from "../../components/constants";
-
+import userRequest from "../../components/requests/userRequests";
 
 function RegisterPage({api, SPACE_NAME}) {
 
@@ -14,10 +14,13 @@ function RegisterPage({api, SPACE_NAME}) {
     const [location, setLocation] = useState("");
     const [loginForm, setLoginForm] = useState({});
     const [isLogin, setLogin] = useState(false);
+    const [missMatchPassword, setMissMatchPassword] = useState(false);
 
     async function handleSignUpAccount() {
-        if (password != rewritePassword) {
-
+        if (password !== rewritePassword) {
+            document.getElementById("rewritePasswordSignUp").focus();
+            setMissMatchPassword(true);
+            return;
         }
         const requestLogin = {
             user_sso: numberPhone,
@@ -25,9 +28,13 @@ function RegisterPage({api, SPACE_NAME}) {
             location: location,
             space   : SPACE_NAME,
         }
-        let responseData = await requests.postData(api.concat("/customer/register"), requestLogin, constants.ACCESS_TOKEN);
+        let responseData = await requests.postData(api.concat("/api/verify/customer/register"), requestLogin, constants.ACCESS_TOKEN);
         if (responseData.message === "SUCCESS") {
             setLogin(true);
+            alert("Đăng ký thành công")
+            window.location.href = "/ca-nhan";
+        } else {
+            alert("Đăng ký thất bại, số điện thoại đã được sử dụng");
         }
     }
 
@@ -37,6 +44,7 @@ function RegisterPage({api, SPACE_NAME}) {
             setLogin(false);
             setPassword("");
             setNumberPhone("");
+            setMissMatchPassword(false);
         };
     }, []);
 
@@ -52,14 +60,14 @@ function RegisterPage({api, SPACE_NAME}) {
                             <Card.Body>
                                 <Card.Title>Đăng ký</Card.Title>
 
-                                <Form>
+                                <div>
                                     <Row className="mb-3">
 
                                         <Form.Group as={Col} controlId="formGridPassword">
                                             <Form.Label>Số điện thoại</Form.Label>
                                             <InputGroup>
                                                 <InputGroup.Text>+84</InputGroup.Text>
-                                                <Form.Control onChange={(event) => {
+                                                <Form.Control value={numberPhone} onChange={(event) => {
                                                     setNumberPhone(event.target.value)
                                                 }}
                                                               type="text" placeholder="..."/>
@@ -69,15 +77,18 @@ function RegisterPage({api, SPACE_NAME}) {
 
                                     <Form.Group className="mb-3">
                                         <Form.Label>Mật khẩu</Form.Label>
-                                        <Form.Control onChange={(event) => {
+                                        <Form.Control value={password} onChange={(event) => {
                                             setPassword(event.target.value)
                                         }}
                                                       type="password" placeholder="..."/>
                                     </Form.Group>
 
                                     <Form.Group className="mb-3">
-                                        <Form.Label>Nhập lại mật khẩu</Form.Label>
-                                        <Form.Control onChange={(event) => {
+                                        <Form.Label>Nhập lại mật khẩu
+                                            {missMatchPassword ? (<span className="text-danger">* Mật khẩu nhập lại không giống ở trên</span> ) : (<></>)}
+                                        </Form.Label>
+                                        <Form.Control id="rewritePasswordSignUp"
+                                                      onChange={(event) => {
                                             setRewritePassword(event.target.value)
                                         }} type="password" placeholder="..."/>
                                     </Form.Group>
@@ -92,7 +103,7 @@ function RegisterPage({api, SPACE_NAME}) {
                                     <Button className="mr-3" variant="primary" onClick={handleSignUpAccount} type="submit">
                                         Đăng ký
                                     </Button>
-                                </Form>
+                                </div>
                                 <div className="line mt-5 mb-5"></div>
 
                             </Card.Body>

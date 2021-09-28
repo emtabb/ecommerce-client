@@ -48,7 +48,7 @@ function Navbar() {
     };
     return (
         <nav className="navbar navbar-expand navbar-light container-fluid justify-content-between shadow sticky-top">
-            <a className="navbar-brand" href="#">
+            <a className="navbar-brand" href="/">
                 {/*< FigureComponent>*/}
                 <img src="/gnikecoffee.jpeg" style={{width: "3.5rem", height: "3.5rem"}}
                      className="d-inline-block align-top rounded-circle" alt="Gnik E Coffee" />

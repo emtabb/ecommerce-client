@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollMenu, VisibilityContext} from "react-horizontal-scrolling-menu";
-import axios from 'axios';
+import {ScrollMenu} from "react-horizontal-scrolling-menu";
 
 import util from "../util/util";
 import constants from "../constants";
 import cartRequest from "../requests/cartRequests";
 import ListGroup from "react-bootstrap/ListGroup";
-import {Badge, Button, Card} from "react-bootstrap";
+import {Button, Card} from "react-bootstrap";
+import LoadingPage from "../LoadingPage";
 
 const {ACTION_ADD_TO_CART} = constants;
 
@@ -16,12 +16,33 @@ function ProductContent(props) {
     const [products, setProducts] = useState([]);
     const [productsCategory, setProductsCategory] = useState([]);
     const [productsCart, setProductsCart] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [dimensions, setDimensions] = useState({});
+
+    function getWindowDimensions() {
+        const {innerWidth: width, innerHeight: height} = window;
+        return {
+            width,
+            height
+        };
+    }
 
     useEffect(() => {
         setProducts(props.products);
         setProductsCategory(props.products);
+        setDimensions(getWindowDimensions())
+
+        function handleResize() {
+            setDimensions(getWindowDimensions())
+        }
+
+        window.addEventListener('resize', handleResize);
+        setLoading(true);
+
         return () => {
             setProducts([]);
+            setLoading(false);
+            window.removeEventListener('resize', handleResize);
         }
     }, []);
 
@@ -35,31 +56,38 @@ function ProductContent(props) {
         return cart;
     }
 
-    return (
-        <div className="row">
-            <div className="col-12 col-md-3 col-lg-3 mt-3">
-                <ProductCategory categories={category} productsOrigin={products}
-                                 setProductsCategory={setProductsCategory}/>
-            </div>
-            <div className="mt-3 col-12 col-md-8 col-lg-8">
-                <div className="row">
-                    {productsCategory.map(product => {
-                        return (
-                            <ProductCard api={api} cartAction={handleAddProductToCart}
-                                         key={product._id}
-                                         product={product}/>
-                        )
-                    })}
+    if (loading) {
+        return (
+            <div className="row" style={{marginBottom: "3rem"}}>
+                <div className="mt-2 col-12 col-md-3 col-lg-3 container">
+                    <ProductCategory categories={category} productsOrigin={products}
+                                     dimensions={dimensions}
+                                     setProductsCategory={setProductsCategory}/>
+                </div>
+                <div className="mt-2 col-12 col-md-8 col-lg-8">
+                    <ScrollMenu style={{height: "auto"}}>
+                        {
+                            productsCategory.length !== 0 ? productsCategory.map(product => {
+                                return (
+                                    <ProductCard api={api} cartAction={handleAddProductToCart}
+                                                 key={product._id}
+                                                 product={product}/>
+                                )
+                            }) : (<div className="text-center"> Không có sản phẩm </div>)
+                        }
+                    </ScrollMenu>
                 </div>
             </div>
-        </div>
-    )
+        )
+    } else {
+        return <LoadingPage/>
+    }
 
 }
 
 function ProductCategory(props) {
 
-    const {categories, productsOrigin, setProductsCategory} = props;
+    const {categories, productsOrigin, setProductsCategory, dimensions} = props;
 
     function handleOnClickMenuItem(key) {
         setCategory(key);
@@ -72,53 +100,40 @@ function ProductCategory(props) {
     }
 
     const [category, setCategory] = useState("");
-    const [dimensions, setDimensions] = useState({});
-
-    function getWindowDimensions() {
-        const {innerWidth: width, innerHeight: height} = window;
-        return {
-            width,
-            height
-        };
-    }
 
     useEffect(() => {
-        function handleResize() {
-            setDimensions(getWindowDimensions())
-        }
-
         setCategory("ALL");
-        window.addEventListener('resize', handleResize);
         return () => {
-            window.removeEventListener('resize', handleResize);
+            setCategory("");
         }
     }, []);
 
-    if (dimensions.width < 650) {
+    if (dimensions.width < 450) {
         return (
-            <Card className="form-inline col-auto d-inline-block shadow">
+            <Card className="form-inline col-auto d-inline-block shadow fixed-top" style={{marginTop: "6rem"}}>
                 <ScrollMenu style={{height: "auto"}}>
                     <h3>
-                    <Button
-                        className={"badge badge-pill m-2 p-3 " + ("ALL" === category ? "text-white" : "text-success")} key={"ALL"}
-                        variant={"ALL" === category ? "success" : "outline-success"}
-                        onClick={() => {
-                            handleOnClickMenuItem("ALL")
-                        }}
-                    > Tất cả </Button>
+                        <Button
+                            className={"badge badge-pill m-2 p-2 " + ("ALL" === category ? "text-white" : "text-success")}
+                            key={"ALL"}
+                            variant={"ALL" === category ? "success" : "outline-success"}
+                            onClick={() => {
+                                handleOnClickMenuItem("ALL")
+                            }}
+                        > Tất cả </Button>
                     </h3>
                     {
                         categories.map(cate => (
                             <h3 key={cate.key}>
-                            <Button
-                                className={"badge badge-pill m-2 p-3 " + (cate.key === category ? "text-white" : "text-success")}
-                                variant={cate.key === category ?"success" : "outline-success"}
-                                onClick={() => {
-                                    handleOnClickMenuItem(cate.key)
-                                }}
-                                style={{color : "green"}}
-                            > {cate.value}
-                            </Button>
+                                <Button
+                                    className={"badge badge-pill m-2 p-2 " + (cate.key === category ? "text-white" : "text-success")}
+                                    variant={cate.key === category ? "success" : "outline-success"}
+                                    onClick={() => {
+                                        handleOnClickMenuItem(cate.key)
+                                    }}
+                                    style={{color: "green"}}
+                                > {cate.value}
+                                </Button>
                             </h3>
                         ))
                     }
@@ -163,22 +178,23 @@ function ProductCard(props) {
         }
     }
 
-    let borderRadius = "0.2rem";
+    let borderRadius = "0.5rem";
     let cardSubStyleSheet = {
-        borderRadius: borderRadius
+        borderRadius: borderRadius,
+        height: "25rem",
+        width: "18rem"
     }
 
     let cardImageSubStyleSheet = {
-        borderTopLeftRadius: borderRadius,
-        borderTopRightRadius: borderRadius,
+        borderRadius: borderRadius,
         width: "100%", objectFit: "cover",
-        height: "20rem"
+        height: "12rem",
     }
 
-    const styleCard = {}
     return (
-        <div className="col-xs-6 col-6 col-sm-6 col-md-6 col-lg-4 col-xl-3 d-flex float-left card">
-
+        <div className="d-inline-block d-flex mr-3 ml-3 card"
+            style={cardSubStyleSheet}
+        >
             <img className="card-img-top mt-2"
                  style={cardImageSubStyleSheet}
                  src={product.background === ""
@@ -186,19 +202,15 @@ function ProductCard(props) {
                      : `${api}/blob/${product.background}`} alt={product.description}/>
             <div className="card-body flex-fill">
                 <a href={"/san-pham/" + product.search_title}><h6>{product.label}</h6></a>
-                <p className="card-text">{product.description}</p>
-                <div className="input-group text-center mb-3 w-100">
-                    <div className="form-control d-sm-none">{util.beautyNumber(product.promotion)}</div>
-                    <div className="form-control d-none d-sm-block">Giá: {util.beautyNumber(product.promotion)}</div>
-                    <div className="input-group-append">
-                        <span className="input-group-text">đ</span>
-                    </div>
+            </div>
+            <div className="card-footer">
+                <div className="text-center mb-2 w-100">
+                    <div className="form-control d-sm-none w-100">{util.beautyNumber(product.promotion)} đ</div>
+                    <div className="form-control d-none d-sm-block">Giá: {util.beautyNumber(product.promotion)} đ</div>
                 </div>
                 <button className="form-control btn btn-success w-100" onClick={addProductToCard}>Mua</button>
             </div>
-
         </div>
-
     )
 }
 

@@ -4,16 +4,21 @@ import Navbar from "../../components/Navbar";
 import ProductView from "../../components/content/ProductView";
 import Head from "next/head";
 
-const ProductDetailPage = ({product, api}) => {
+const ProductDetailPage = ({product, api, searchProduct}) => {
     return (
         <div className="bg-gray-100">
             <Head>
-                <meta name="image" content={api.concat("/blob" + product.background)} />
+                <title>{product.label}</title>
+                <meta name="title" content={product.label} />
+                <meta name="image" content={api.concat("/blob/" + product.background)} />
                 <meta name="description" content={product.description} />
+                <meta property="og:url" content={"https://gnikee.com/san-pham/".concat(searchProduct)} />
+                <meta property="og:title" content={product.label} />
+                <meta property="og:description" content={product.description} />
                 <meta property="og:image" content={api.concat("/blob/" + product.background)} />
                 <meta property="og:image:type" content="image/jpeg" />
-                <meta property="og:image:width" content="400" />
-                <meta property="og:image:height" content="300" />
+                <meta property="og:image:width" content="1280" />
+                <meta property="og:image:height" content="840" />
                 <meta property="og:image:alt" content={product.description} />
             </Head>
             <div>
@@ -39,7 +44,8 @@ export async function getServerSideProps(context) {
     return {
         props: {
             api,
-            product
+            product,
+            searchProduct : searchProduct,
         }
     }
 }

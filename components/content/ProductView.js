@@ -83,7 +83,10 @@ export default function ProductView(props) {
                         <h4>{product.label}</h4>
                         <div className="line"/>
                         <div className="">
-                            <span className="">Giá: <h4>{util.beautyNumber(product.promotion)} đ <small><del>{util.beautyNumber(product.price)} đ</del></small></h4></span>
+                            <span className="">Giá: <h4>{util.beautyNumber(product.promotion)} đ
+                                {product.price !== product.promotion
+                                    ? (<small><del>{util.beautyNumber(product.price)} đ</del></small>)
+                                    : (<></>)}</h4></span>
                         </div>
                         <div className="line"/>
                         <label>Mô tả sản phẩm: </label>
@@ -96,11 +99,10 @@ export default function ProductView(props) {
                             <input className="form-control" onChange={changePurchase} value={purchase} type="number"/>
                             <div className="input-group-append">
                                 <span
-                                    className="input-group-text"> {product.unit === undefined ? "/ 1 sản phẩm" : "/ 1" + product.unit} </span>
+                                    className="input-group-text"> {product.unit === undefined ? "/ 1 sản phẩm" : "/ 1 " + product.unit} </span>
                             </div>
                         </div>
-                        <button className="btn btn-primary" onClick={addToCart}>Thêm vào giỏ hàng</button>
-
+                        <button className="btn btn-primary" onClick={addToCart}>Đặt hàng</button>
                     </div>
                     <div className="col-xs-12 col-12 col-md-12 mt-5">
                         <Card.Body className="justify-content-center">
