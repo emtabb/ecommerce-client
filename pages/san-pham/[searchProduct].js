@@ -12,8 +12,12 @@ const ProductDetailPage = ({product, api, searchProduct}) => {
                 <meta name="title" content={product.label} />
                 <meta name="image" content={api.concat("/blob/" + product.background)} />
                 <meta name="description" content={product.description} />
+                <meta property="fb:app_id" content="1132734720507826" />
+                <meta property="og:type" content="article" />
+                <meta property="article:publisher" content="https://facebook.com/cafebinhthanh" />
                 <meta property="og:url" content={"https://gnikee.com/san-pham/".concat(searchProduct)} />
                 <meta property="og:title" content={product.label} />
+                <meta property="og:site_name" content={"GNIKE COFFEE: ".concat(product.label)} />
                 <meta property="og:description" content={product.description} />
                 <meta property="og:image" content={api.concat("/blob/" + product.background)} />
                 <meta property="og:image:type" content="image/jpeg" />

@@ -3,7 +3,7 @@ const {parse} = require('url');
 const {readFileSync} = require('fs');
 const next = require('next');
 
-const port = 3000;
+const port = 80;
 const production = process.env.NODE_ENV === 'production';
 const app = next({production});
 const handle = app.getRequestHandler();
@@ -24,7 +24,7 @@ app.prepare()
         // })
         createServer((req, res) => {
             const parsedUrl = parse(req.url, true);
-            handle(req, res, parsedUrl);
+            handle(req, res, parsedUrl).then();
         }).listen(port, err => {
             if (err) throw err;
             console.log(`> Ready on http://localhost:${port}`);

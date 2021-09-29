@@ -15,6 +15,9 @@ export default function Home({loadspace, category, api}) {
                 <meta name="image" content="https://gnikee.com/background-store.jpg" />
                 <meta name="description" content="Thương hiệu cà phê Việt, giao hàng tận nơi." />
                 <meta property="og:url" content="https://gnikee.com" />
+                <meta property="fb:app_id" content="1132734720507826" />
+                <meta property="og:type" content="article" />
+                <meta property="article:publisher" content="https://facebook.com/cafebinhthanh" />
                 <meta property="og:title" content="GNIKE COFFEE: giao tận nơi, thơm trọn từng giây." />
                 <meta property="og:site_name" content="GNIKE COFFEE: Cà phê Việt" />
                 <meta property="og:description" content="Thương hiệu cà phê Việt, giao hàng tận nơi." />
