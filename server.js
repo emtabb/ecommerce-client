@@ -10,14 +10,13 @@ const production = process.env.NODE_ENV === 'production';
 const app = next({production});
 const handle = app.getRequestHandler();
 
-const server = express();
 // const httpsOptions = {
 //     key: readFileSync('./certificates/key.pem', "utf-8"),
 //     cert: readFileSync('./certificates/cert.pem', "utf-8"),
 //     ca : [readFileSync('./certificates/root-ca.crt', "ascii"), readFileSync('./certificates/ca_bundle.crt', "ascii"
 //     )]
 // };
-
+const server = express();
 const PROXY_API = process.env.PROXY_API;
 
 app.prepare()
@@ -34,7 +33,9 @@ app.prepare()
             target: PROXY_API,
             changeOrigin: true
         }));
-        server.all("*", (req, res) => handle(req, res));
+        server.all("*", async(req, res) => {
+            return await handle(req, res)
+        });
 
         createServer(server)
             .listen(port, err => {
