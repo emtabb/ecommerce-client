@@ -7,7 +7,7 @@ class Footer extends React.Component {
 
     render() {
         return (
-            <footer className="footer bg-green-800" style={{height: "auto"}}>
+            <footer className="footer bg-green-800" style={{height: "10rem"}}>
                 <div className="container">
                     <div className="row align-items-center justify-content-lg-between">
                         <div className="mb-lg-0 mb-4">
@@ -16,7 +16,12 @@ class Footer extends React.Component {
                         <div className="">
                             <ul className="nav nav-footer justify-content-center justify-content-lg-center">
                                 <li className="nav-item">
-                                    <a href="https://www.creative-tim.com" className="nav-link text-white-50">
+                                    <a href="#" className="nav-link text-white-50">
+                                        Mọi thắc mắc xin liên hệ: 0909.968.088
+                                    </a>
+                                </li>
+                                <li className="nav-item">
+                                    <a href="#" className="nav-link text-white-50">
                                         Địa chỉ cửa hàng: 860/29-31 Xô Viết Nghệ Tĩnh, Phường 25, Quận Bình Thạnh, TP Hồ Chí Minh.
                                     </a>
                                 </li>

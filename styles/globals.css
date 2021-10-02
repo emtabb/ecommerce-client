@@ -166,6 +166,10 @@ a.article, a.article:hover {
 .bg-green-800 {
   background-color: #276749;
 }
+
+.bg-green-900 {
+  background-color: #22543d;
+}
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */

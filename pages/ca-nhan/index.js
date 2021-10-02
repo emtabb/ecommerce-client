@@ -4,8 +4,8 @@ import constants from "../../components/constants";
 import Navbar from "../../components/Navbar";
 import {Button, Card, Col, Form, Row, InputGroup} from "react-bootstrap";
 import userRequest from "../../components/requests/userRequests";
-import util from "../../components/util/util";
 import LoadingPage from "../../components/LoadingPage";
+import Footer from "../../components/Footer";
 
 function getUser() {
     let payload = {
@@ -21,8 +21,8 @@ function getUser() {
 
 function setUser(data) {
     let payload = {
-        action : constants.ACTION_SET_USER_INFORMATION,
-        data : data
+        action: constants.ACTION_SET_USER_INFORMATION,
+        data: data
     }
     return userRequest(payload)
 }
@@ -37,7 +37,10 @@ export default function PersonalInformation({api, SPACE_NAME}) {
     const [password, setPassword] = useState("");
     const [rewritePassword, setRewritePassword] = useState("");
     const [missMatchPassword, setMissMatchPassword] = useState(false);
+    // Update information
     const [locationData, setLocationData] = useState("");
+    const [emailData, setEmailData] = useState("");
+    const [numberPhone, setNumberPhone] = useState("");
     const [loading, setLoading] = useState(false);
 
     async function handleLoadUserInformation() {
@@ -50,7 +53,13 @@ export default function PersonalInformation({api, SPACE_NAME}) {
 
             let userInfoResponse = await requests.getData(api.concat("/api/user/information"), constants.ACCESS_TOKEN);
             if (userInfoResponse.message !== "NOT FOUND") {
+                const userInfoResponseData = userInfoResponse.data;
                 setUserInformation(userInfoResponse.data);
+
+                setLocationData(userInfoResponseData.location);
+                setFirstname(userInfoResponseData.firstname)
+                setEmailData(userInfoResponseData.email)
+                setNumberPhone(userInfoResponseData.user_sso);
             }
         }
     }
@@ -60,8 +69,10 @@ export default function PersonalInformation({api, SPACE_NAME}) {
             username: numberPhoneLogin,
             password: passwordLogin,
         }
-        let responseData = await requests.postData(api.concat("/verify/login"), requestLogin, constants.ACCESS_TOKEN);
-        if (responseData.access_token) {
+        let responseData = await requests.postData(api.concat("/verify/login"), requestLogin);
+        if (responseData.message === "Invalid authentication") {
+            alert("Nhập sai số điện thoại hoặc mật khẩu đăng nhập!!!");
+        } else if (responseData.access_token) {
             requests.setSessionStorage(constants.ACCESS_TOKEN, responseData[constants.ACCESS_TOKEN]);
             requests.setSessionStorage(constants.USER_SSO, responseData[constants.USER_SSO]);
             let userResponse = await requests.getData(api.concat("/api/user/sso"), constants.ACCESS_TOKEN);
@@ -79,10 +90,10 @@ export default function PersonalInformation({api, SPACE_NAME}) {
         }
         const requestLogin = {
             user_sso: userData.user_sso,
-            name    : firstname,
+            name: firstname,
             password: password,
             location: locationData,
-            space   : SPACE_NAME,
+            space: SPACE_NAME,
         }
         let responseData = await requests.postData(api.concat("/api/verify/customer/active-account"), requestLogin, constants.ACCESS_TOKEN);
         if (responseData.message === "SUCCESS") {
@@ -91,9 +102,24 @@ export default function PersonalInformation({api, SPACE_NAME}) {
         }
     }
 
+    async function handleUpdateInformation() {
+        let requestData = {
+            user_sso: numberPhone,
+            firstname: firstname,
+            email: emailData,
+            location: locationData
+        }
+        let responseData = await requests.putData(api.concat("/api/user/information"), requestData, constants.ACCESS_TOKEN);
+        if (responseData.message === "SUCCESS") {
+            alert("Cập nhật thông tin thành công");
+            window.location.href = "/ca-nhan";
+        } else {
+            alert("Hệ thống xảy ra lỗi, vui lòng cập nhật sau.")
+        }
+    }
+
     useEffect(() => {
         handleLoadUserInformation().then().catch();
-        setLocationData(userData.location);
         setLoading(true);
         return () => {
             setUserInformation({});
@@ -104,11 +130,13 @@ export default function PersonalInformation({api, SPACE_NAME}) {
             setLoading(false);
             setMissMatchPassword(false);
             setFirstname("");
+            setNumberPhone("");
+            setEmailData("");
         };
     }, []);
 
     if (!loading) {
-        return <LoadingPage />
+        return <LoadingPage/>
     } else {
         if (userData.disabled) {
             /*
@@ -129,71 +157,77 @@ export default function PersonalInformation({api, SPACE_NAME}) {
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <Card className="d-flex col-12 col-sm-6 justify-content-center" border="dark">
-                                    <Card.Header>Thông tin cá nhân</Card.Header>
-                                    <Card.Body>
-                                        <Card.Title></Card.Title>
-                                        <Card.Text>
+                                <div className="col-12 col-sm-6 p-4">
+                                    <Card className="d-flex justify-content-center" border="success">
+                                        <Card.Header>Thông tin cá nhân</Card.Header>
+                                        <Card.Body>
+                                            <Card.Title></Card.Title>
+                                            <Card.Text>
 
-                                        </Card.Text>
-                                        <div>
-                                            <Row className="mb-3">
-                                                <Form.Group as={Col}>
-                                                    <Form.Label>Anh/ chị</Form.Label>
-                                                    <Form.Control type="input"
-                                                                  value={firstname}
-                                                                  onChange={(event) => {setFirstname(event.target.value)}}
+                                            </Card.Text>
+                                            <div>
+                                                <Row className="mb-3">
+                                                    <Form.Group as={Col}>
+                                                        <Form.Label>Anh/ chị</Form.Label>
+                                                        <Form.Control type="input"
+                                                                      value={firstname}
+                                                                      onChange={(event) => {
+                                                                          setFirstname(event.target.value)
+                                                                      }}
+                                                                      placeholder="..."/>
+                                                    </Form.Group>
+
+                                                    <Form.Group as={Col}>
+                                                        <Form.Label>Số điện thoại</Form.Label>
+                                                        <InputGroup className="mb-3">
+                                                            <InputGroup.Text>+84</InputGroup.Text>
+                                                            <Form.Control value={userData.user_sso}
+                                                                          placeholder="..."
+                                                                          readOnly
+                                                            />
+                                                        </InputGroup>
+                                                    </Form.Group>
+                                                </Row>
+
+                                                <Form.Group className="mb-3">
+                                                    <Form.Label>Mật khẩu</Form.Label>
+                                                    <Form.Control value={password} onChange={(event) => {
+                                                        setPassword(event.target.value)
+                                                    }}
+                                                                  type="password" placeholder="..."/>
+                                                </Form.Group>
+
+                                                <Form.Group className="mb-3">
+                                                    <Form.Label>Nhập lại mật khẩu
+                                                        {missMatchPassword ? (
+                                                            <span className="text-danger">* Mật khẩu nhập lại không giống ở trên</span>) : (<></>)}
+                                                    </Form.Label>
+                                                    <Form.Control id="rewritePasswordSignUp"
+                                                                  onChange={(event) => {
+                                                                      setRewritePassword(event.target.value)
+                                                                  }} type="password" placeholder="..."/>
+                                                </Form.Group>
+
+                                                <Form.Group className="mb-3">
+                                                    <Form.Label>Địa chỉ</Form.Label>
+                                                    <Form.Control value={locationData}
+                                                                  onChange={(event) => {
+                                                                      setLocationData(event.target.value);
+                                                                  }}
                                                                   placeholder="..."/>
                                                 </Form.Group>
 
-                                                <Form.Group as={Col}>
-                                                    <Form.Label>Số điện thoại</Form.Label>
-                                                    <InputGroup className="mb-3">
-                                                        <InputGroup.Text>+84</InputGroup.Text>
-                                                        <Form.Control value={userData.user_sso}
-                                                                      placeholder="..."
-                                                                      readOnly
-                                                        />
-                                                    </InputGroup>
-                                                </Form.Group>
-                                            </Row>
-
-                                            <Form.Group className="mb-3">
-                                                <Form.Label>Mật khẩu</Form.Label>
-                                                <Form.Control value={password} onChange={(event) => {
-                                                    setPassword(event.target.value)
-                                                }}
-                                                              type="password" placeholder="..."/>
-                                            </Form.Group>
-
-                                            <Form.Group className="mb-3">
-                                                <Form.Label>Nhập lại mật khẩu
-                                                    {missMatchPassword ? (
-                                                        <span className="text-danger">* Mật khẩu nhập lại không giống ở trên</span>) : (<></>)}
-                                                </Form.Label>
-                                                <Form.Control id="rewritePasswordSignUp"
-                                                              onChange={(event) => {
-                                                                  setRewritePassword(event.target.value)
-                                                              }} type="password" placeholder="..."/>
-                                            </Form.Group>
-
-                                            <Form.Group className="mb-3">
-                                                <Form.Label>Địa chỉ</Form.Label>
-                                                <Form.Control value={locationData}
-                                                              onChange={(event) => {
-                                                                  setLocationData(event.target.value);
-                                                              }}
-                                                              placeholder="..."/>
-                                            </Form.Group>
-
-                                            <Button variant="primary" type="button" onClick={handleActiveAccount}>
-                                                Đăng ký
-                                            </Button>
-                                        </div>
-                                    </Card.Body>
-                                </Card>
+                                                <Button variant="primary" type="button" onClick={handleActiveAccount}>
+                                                    Đăng ký
+                                                </Button>
+                                            </div>
+                                        </Card.Body>
+                                    </Card>
+                                </div>
                             </div>
                         </div>
+                        <div style={{height: "5rem"}}/>
+                        <Footer />
                     </div>
                 </div>
             )
@@ -207,69 +241,71 @@ export default function PersonalInformation({api, SPACE_NAME}) {
                         <Navbar/>
                         <div className="container mt-5 mb-5">
                             <div className="row">
-                                <Card className="d-flex col-12 col-sm-6 justify-content-center" border="dark">
-                                    <Card.Header>Thông tin cá nhân</Card.Header>
+                                <div className="col-12 col-sm-6 p-4">
+                                    <Card className=" d-flex justify-content-center shadow"
+                                          border="success">
+                                        <Card.Header>Thông tin cá nhân</Card.Header>
 
-                                    <Card.Body>
-                                        <Card.Title>Cập nhật thông tin cá nhân</Card.Title>
-                                        <Card.Text>
+                                        <Card.Body>
+                                            <Card.Title>Cập nhật thông tin cá nhân</Card.Title>
+                                            <Card.Text>
 
-                                        </Card.Text>
-                                        <div>
-                                            <Row className="mb-3">
-                                                <Form.Group as={Col}>
-                                                    <Form.Label>Anh/ chị</Form.Label>
-                                                    <Form.Control value={userInformation.firstname} type="input"
+                                            </Card.Text>
+                                            <div>
+                                                <Row className="mb-3">
+                                                    <Form.Group as={Col}>
+                                                        <Form.Label>Anh/ chị</Form.Label>
+                                                        <Form.Control value={firstname} type="input"
+                                                                      placeholder="..." onChange={(event) => {
+                                                            setFirstname(event.target.value)
+                                                        }}/>
+                                                    </Form.Group>
+
+                                                    <Form.Group as={Col}>
+                                                        <Form.Label>Số điện thoại</Form.Label>
+                                                        <InputGroup className="mb-3">
+                                                            <InputGroup.Text>+84</InputGroup.Text>
+                                                            <Form.Control value={numberPhone}
+                                                                          onChange={(event) => {
+                                                                              setNumberPhone(event.target.value)
+                                                                          }}
+                                                                          placeholder="..."
+                                                                          readOnly
+                                                            />
+                                                        </InputGroup>
+                                                    </Form.Group>
+                                                </Row>
+
+                                                <Form.Group className="mb-3">
+                                                    <Form.Label>Địa chỉ</Form.Label>
+                                                    <Form.Control value={locationData}
+                                                                  onChange={(event) => {
+                                                                      setLocationData(event.target.value)
+                                                                  }}
                                                                   placeholder="..."/>
                                                 </Form.Group>
 
-                                                <Form.Group as={Col}>
-                                                    <Form.Label>Số điện thoại</Form.Label>
-                                                    <InputGroup className="mb-3">
-                                                        <InputGroup.Text>+84</InputGroup.Text>
-                                                        <Form.Control value={userInformation.user_sso}
-                                                                      placeholder="..."/>
-                                                    </InputGroup>
+                                                <Form.Group className="mb-3">
+                                                    <Form.Label>Địa chỉ email</Form.Label>
+                                                    <Form.Control value={emailData}
+                                                                  onChange={(event) => {
+                                                                      setEmailData(event.target.value)
+                                                                  }}
+                                                                  placeholder="..."/>
                                                 </Form.Group>
-                                            </Row>
 
-                                            <Form.Group className="mb-3">
-                                                <Form.Label>Địa chỉ</Form.Label>
-                                                <Form.Control value={userInformation.location} placeholder="..."/>
-                                            </Form.Group>
-
-                                            <Form.Group className="mb-3">
-                                                <Form.Label>Địa chỉ email</Form.Label>
-                                                <Form.Control value={userInformation.email} placeholder="..."/>
-                                            </Form.Group>
-
-                                            {/*<Row className="mb-3">*/}
-                                            {/*    <Form.Group as={Col}>*/}
-                                            {/*        <Form.Label>Tỉnh/Thành phố</Form.Label>*/}
-                                            {/*        <Form.Control/>*/}
-                                            {/*    </Form.Group>*/}
-
-                                            {/*    <div className="col-auto my-1">*/}
-                                            {/*        <label className="mr-sm-2"*/}
-                                            {/*               htmlFor="inlineFormCustomSelect">Quận/Huyện</label>*/}
-                                            {/*        <select className="custom-select mr-sm-2"*/}
-                                            {/*                id="inlineFormCustomSelect">*/}
-                                            {/*            <option selected>Chọn...</option>*/}
-                                            {/*            <option value="1">One</option>*/}
-                                            {/*            <option value="2">Two</option>*/}
-                                            {/*            <option value="3">Three</option>*/}
-                                            {/*        </select>*/}
-                                            {/*    </div>*/}
-                                            {/*</Row>*/}
-
-                                            <Button variant="primary" type="button">
-                                                Cập nhật thông tin
-                                            </Button>
-                                        </div>
-                                    </Card.Body>
-                                </Card>
+                                                <Button variant="primary" type="button"
+                                                        onClick={handleUpdateInformation}>
+                                                    Cập nhật thông tin
+                                                </Button>
+                                            </div>
+                                        </Card.Body>
+                                    </Card>
+                                </div>
                             </div>
                         </div>
+                        <div style={{height: "5rem"}}/>
+                        <Footer/>
                     </div>
                 </div>
             )
@@ -283,47 +319,51 @@ export default function PersonalInformation({api, SPACE_NAME}) {
                         <Navbar/>
                         <div className="container mt-5 mb-5">
                             <div className="row">
-                                <Card className="d-flex col-12 col-sm-6 justify-content-center" border="dark">
-                                    <Card.Header>Anh/ chị chưa đăng nhập. Vui lòng đăng nhập để có trải nghiệm tốt
-                                        hơn</Card.Header>
+                                <div className="col-12 col-sm-6 p-3">
+                                    <Card className="d-flex justify-content-center " border="success">
+                                        <Card.Header>Anh/ chị chưa đăng nhập. Vui lòng đăng nhập để có trải nghiệm tốt
+                                            hơn</Card.Header>
 
-                                    <Card.Body>
-                                        <Card.Title>Đăng nhập</Card.Title>
-                                        <div>
-                                            <Row className="mb-3">
+                                        <Card.Body>
+                                            <Card.Title>Đăng nhập</Card.Title>
+                                            <div>
+                                                <Row className="mb-3">
 
-                                                <Form.Group as={Col}>
-                                                    <Form.Label>Số điện thoại</Form.Label>
-                                                    <InputGroup>
-                                                        <InputGroup.Text>+84</InputGroup.Text>
-                                                        <Form.Control onChange={(event) => {
-                                                            setNumberPhoneLogin(event.target.value)
-                                                        }}
-                                                                      type="text" placeholder="..."/>
-                                                    </InputGroup>
+                                                    <Form.Group as={Col}>
+                                                        <Form.Label>Số điện thoại</Form.Label>
+                                                        <InputGroup>
+                                                            <InputGroup.Text>+84</InputGroup.Text>
+                                                            <Form.Control onChange={(event) => {
+                                                                setNumberPhoneLogin(event.target.value)
+                                                            }}
+                                                                          type="text" placeholder="..."/>
+                                                        </InputGroup>
+                                                    </Form.Group>
+                                                </Row>
+
+                                                <Form.Group className="mb-3">
+                                                    <Form.Label>Mật khẩu</Form.Label>
+                                                    <Form.Control id="passwordLoginId" onChange={(event) => {
+                                                        setPasswordLogin(event.target.value)
+                                                    }}
+                                                                  type="password" placeholder="..."/>
                                                 </Form.Group>
-                                            </Row>
 
-                                            <Form.Group className="mb-3">
-                                                <Form.Label>Mật khẩu</Form.Label>
-                                                <Form.Control id="passwordLoginId" onChange={(event) => {
-                                                    setPasswordLogin(event.target.value)
-                                                }}
-                                                              type="password" placeholder="..."/>
-                                            </Form.Group>
+                                                <Button className="mr-3" variant="primary" onClick={handleSignInAccount}
+                                                        type="submit">
+                                                    Đăng nhập
+                                                </Button>
+                                            </div>
+                                            <div className="line mt-5 mb-5"></div>
+                                            Hoặc đăng ký <a href="/dang-ky"> Tại đây</a>
+                                        </Card.Body>
 
-                                            <Button className="mr-3" variant="primary" onClick={handleSignInAccount}
-                                                    type="submit">
-                                                Đăng nhập
-                                            </Button>
-                                        </div>
-                                        <div className="line mt-5 mb-5"></div>
-                                        Hoặc đăng ký <a href="/dang-ky"> Tại đây</a>
-                                    </Card.Body>
-
-                                </Card>
+                                    </Card>
+                                </div>
                             </div>
                         </div>
+                        <div style={{height: "5rem"}}/>
+                        <Footer />
                     </div>
                 </div>
             )

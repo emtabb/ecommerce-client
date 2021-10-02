@@ -4,6 +4,8 @@ import constants from "../../components/constants";
 import requests from "../../components/requests";
 import OrderContent from "../../components/content/OrderContent";
 import userRequest from "../../components/requests/userRequests";
+import Footer from "../../components/Footer";
+import {Card} from "react-bootstrap";
 
 function getUser() {
     let payload = {
@@ -48,7 +50,7 @@ export default function Order({api}) {
                 <div className="container">
                     <div className="row">
                         {
-                            user.disabled === true ?  (<div className="col-12">
+                            user.disabled === true ? (<div className="col-12">
                                 <div className="alert alert-warning alert-dismissible fade show" role="alert">
                                     <strong>Lưu ý</strong> Xin quý khách hãy <a href="/ca-nhan">đăng nhập </a>
                                     tài khoản để theo dõi đơn hàng của mình một cách tốt nhất. Xin cảm ơn quý khách!
@@ -56,16 +58,22 @@ export default function Order({api}) {
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                            </div> ) : (<></>)
+                            </div>) : (<></>)
                         }
 
                         {
                             Object.keys(order).length !== 0 ? (
                                 <OrderContent orders={order} api={api}/>
-                            ) : (<div>Không có đơn hàng</div>)
+                            ) : (
+                                <Card className="col-xs-12 col-12 col-md-8 p-3" style={{minHeight: '18rem'}}>
+                                    Hiện tại bạn chưa có đơn hàng
+                                </Card>
+                            )
                         }
                     </div>
                 </div>
+                <div style={{height: "10rem"}}/>
+                <Footer/>
             </div>
         </div>
     )

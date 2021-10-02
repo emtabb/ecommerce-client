@@ -1,6 +1,7 @@
 import React from 'react';
 import CartContent from "../../components/content/CartContent";
 import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 
 export default function Cart({api, space}) {
     console.log(api);
@@ -11,6 +12,8 @@ export default function Cart({api, space}) {
                 <div className="container">
                     <CartContent api={api} space={space} />
                 </div>
+                <div style={{height: "10rem"}}/>
+                <Footer />
             </div>
         </div>
     )

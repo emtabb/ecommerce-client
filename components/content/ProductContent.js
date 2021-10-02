@@ -58,8 +58,8 @@ function ProductContent(props) {
 
     if (loading) {
         return (
-            <div className="row" style={{marginBottom: "3rem"}}>
-                <div className="mt-2 col-12 col-md-3 col-lg-3 container">
+            <div className="row mt-4" style={{marginBottom: "3rem"}}>
+                <div className="mt-2 mb-2 col-12 col-md-3 col-lg-3 container">
                     <ProductCategory categories={category} productsOrigin={products}
                                      dimensions={dimensions}
                                      setProductsCategory={setProductsCategory}/>
@@ -110,7 +110,7 @@ function ProductCategory(props) {
 
     if (dimensions.width < 450) {
         return (
-            <Card className="form-inline col-auto d-inline-block shadow fixed-top" style={{marginTop: "6rem"}}>
+            <Card className="form-inline col-auto d-inline-block shadow" >
                 <ScrollMenu style={{height: "auto"}}>
                     <h3>
                         <Button
@@ -195,7 +195,7 @@ function ProductCard(props) {
         <div className="d-inline-block d-flex mr-3 ml-3 card"
             style={cardSubStyleSheet}
         >
-            <img className="card-img-top mt-2"
+            <img className="card-img-top"
                  style={cardImageSubStyleSheet}
                  src={product.background === ""
                      ? "https://blog.sqlauthority.com/wp-content/uploads/2007/06/null-500x259.png"

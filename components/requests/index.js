@@ -65,6 +65,20 @@ const postData = async (url = "", data = {}, keyItem) => {
     return await response.json();
 }
 
+const putData = async (url = "", data = {}, keyItem) => {
+    let item = getSessionStorage(keyItem);
+    let response = await fetch(url, {
+        method: "PUT",
+        headers: {
+            "Accept" : "application/json",
+            "Content-type" : "application/json",
+            "Authorization" : item
+        },
+        body : JSON.stringify(data)
+    });
+    return await response.json();
+}
+
 function checkCookie(cookieName) {
     let username = getCookie(cookieName);
     if (username !== "") {
@@ -107,6 +121,7 @@ export default {
     eraseCookie: eraseCookie,
     getData   : getData,
     postData  : postData,
+    putData   : putData,
     getItem   : getItem,
     storeItem : storeItem,
     getSessionStorage : getSessionStorage,

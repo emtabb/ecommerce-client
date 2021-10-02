@@ -1,10 +1,9 @@
 import Navbar from "../../components/Navbar";
 import {Button, Card, Col, Form, InputGroup, Row} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
-import util from "../../components/util/util";
 import requests from "../../components/requests";
 import constants from "../../components/constants";
-import userRequest from "../../components/requests/userRequests";
+import Footer from "../../components/Footer";
 
 function RegisterPage({api, SPACE_NAME}) {
 
@@ -26,7 +25,7 @@ function RegisterPage({api, SPACE_NAME}) {
             user_sso: numberPhone,
             password: password,
             location: location,
-            space   : SPACE_NAME,
+            space: SPACE_NAME,
         }
         let responseData = await requests.postData(api.concat("/api/verify/customer/register"), requestLogin, constants.ACCESS_TOKEN);
         if (responseData.message === "SUCCESS") {
@@ -85,12 +84,12 @@ function RegisterPage({api, SPACE_NAME}) {
 
                                     <Form.Group className="mb-3">
                                         <Form.Label>Nhập lại mật khẩu
-                                            {missMatchPassword ? (<span className="text-danger">* Mật khẩu nhập lại không giống ở trên</span> ) : (<></>)}
+                                            {missMatchPassword ? (<span className="text-danger">* Mật khẩu nhập lại không giống ở trên</span>) : (<></>)}
                                         </Form.Label>
                                         <Form.Control id="rewritePasswordSignUp"
                                                       onChange={(event) => {
-                                            setRewritePassword(event.target.value)
-                                        }} type="password" placeholder="..."/>
+                                                          setRewritePassword(event.target.value)
+                                                      }} type="password" placeholder="..."/>
                                     </Form.Group>
 
                                     <Form.Group className="mb-3">
@@ -100,7 +99,8 @@ function RegisterPage({api, SPACE_NAME}) {
                                         }} type="text" placeholder="..."/>
                                     </Form.Group>
 
-                                    <Button className="mr-3" variant="primary" onClick={handleSignUpAccount} type="submit">
+                                    <Button className="mr-3" variant="primary" onClick={handleSignUpAccount}
+                                            type="submit">
                                         Đăng ký
                                     </Button>
                                 </div>
@@ -111,6 +111,7 @@ function RegisterPage({api, SPACE_NAME}) {
                         </Card>
                     </div>
                 </div>
+                <Footer/>
             </div>
         </div>
     )

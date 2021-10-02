@@ -9,17 +9,17 @@ const { ACTION_GET_CART } = constants;
 const navbarData = [
     {
         href: "/",
-        src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7s05REmBUWcbI71JPF7bGAwzTrDGyFgAnjA&usqp=CAU",
+        src: "/coffee-menu.png",
         text: "Sản phẩm"
     },
     {
         href: "/gio-hang",
-        src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4WjzkzkDNZ8mqZ5N5fVtGL6UpyJfEwU7qvw&usqp=CAU",
+        src: "/take-away-coffee-icon.png",
         text: "Giỏ hàng"
     },
     {
         href: "/don-hang",
-        src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTF9LdKikLXJ-ihHzICuvot44oHXkr76gINWQ&usqp=CAU",
+        src: "/delivery-icon.png",
         text: "Đơn hàng"
     },
 ]
@@ -43,11 +43,11 @@ function Navbar() {
 
     const profile = {
         href: "/ca-nhan",
-        src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8xSMT8QD_BiRyZmT4MtLQePjffsgaA8FE0A&usqp=CAU",
+        src: "/personal-icon.png",
         text: "Cá nhân"
     };
     return (
-        <nav className="navbar navbar-expand navbar-light container-fluid justify-content-between shadow sticky-top">
+        <nav className="navbar navbar-expand navbar-light bg-green-800 container-fluid justify-content-between shadow sticky-top">
             <a className="navbar-brand" href="/">
                 {/*< FigureComponent>*/}
                 <img src="/gnikecoffee.jpeg" style={{width: "3.5rem", height: "3.5rem"}}
@@ -57,13 +57,13 @@ function Navbar() {
                 {
                     navbarData.map(data => {
                         return (
-                            <li className="nav-item mr-1" key={data.href}>
-                                <a className="badge badge-light" href={data.href}>
+                            <li className="nav-item" key={data.href}>
+                                <a className={"badge ".concat(currentPath === data.href ? "bg-green-900" : "bg-green-800") } href={data.href}>
                                     <FigureComponent
                                         style={{width: "3rem", height: "1.5rem"}}
                                         src={data.src}
                                         text={data.text}
-                                        textColor={currentPath === data.href ? "text-primary" : "text-dark"}
+                                        textColor={"text-light"}
                                         notification={data.href === "/gio-hang" ? (currentProductInCart !== 0 ?
                                             currentProductInCart : <></>)
                                             : <></>
@@ -75,12 +75,12 @@ function Navbar() {
                     })
                 }
             </ul>
-            <a className="badge badge-light" href={profile.href}>
+            <a className={"badge ".concat(currentPath === profile.href ? "bg-green-900" : "bg-green-800")} href={profile.href}>
                 <FigureComponent
                     style={{width: "3rem", height: "1.5rem"}}
                     src={profile.src}
                     text={profile.text}
-                    textColor={currentPath === profile.href ? "text-primary" : "text-dark"}
+                    textColor="text-light"
                 />
             </a>
         </nav>

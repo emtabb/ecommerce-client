@@ -3,6 +3,7 @@ import axios from "axios";
 import Navbar from "../../components/Navbar";
 import ProductView from "../../components/content/ProductView";
 import Head from "next/head";
+import Footer from "../../components/Footer";
 
 const ProductDetailPage = ({product, api, searchProduct}) => {
     return (
@@ -35,6 +36,7 @@ const ProductDetailPage = ({product, api, searchProduct}) => {
                         }
                     </div>
                 </div>
+                <Footer/>
             </div>
         </div>
     )

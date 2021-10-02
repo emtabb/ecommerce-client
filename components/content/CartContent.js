@@ -185,22 +185,22 @@ const CartContent = (props) => {
                     <div className="row">
                         {
                             chooseOption ? (
-                                <div className="col-3">
-                                    <Button className="badge ml-3 mr-3 w-100" onClick={cancelChooseAll}
+                                <h3 className="col-6 col-md-3">
+                                    <Button className="badge badge-pill w-100" onClick={cancelChooseAll}
                                             variant="secondary">{CANCEL_ALL_TEXT_INFO}</Button>
-                                </div>
+                                </h3>
 
                             ) : (
-                                <div className="col-3">
-                                    <Button className="badge ml-3 mr-3 w-100" onClick={chooseAll}
+                                <h3 className="col-6 col-md-3">
+                                    <Button className="badge badge-pill w-100" onClick={chooseAll}
                                             variant="info"> {CHOOSE_ALL_TEXT_INFO} </Button>
-                                </div>
+                                </h3>
                             )
                         }
-                        <div className="col-3">
-                            <Button className="badge ml-3 mr-3 w-100" onClick={clearCart} variant="danger">Xóa toàn
+                        <h3 className="col-6 col-md-3">
+                            <Button className="badge badge-pill w-100" onClick={clearCart} variant="danger">Xóa toàn
                                 bộ.</Button>
-                        </div>
+                        </h3>
                     </div>
                 </div>
 

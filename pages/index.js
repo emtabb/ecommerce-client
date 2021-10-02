@@ -5,6 +5,7 @@ import ProductContent from "../components/content/ProductContent";
 import ESpaceCarousel from "../components/ESpaceCarousel";
 import Head from "next/head";
 import Footer from "../components/Footer";
+import {Card} from "react-bootstrap";
 
 export default function Home({loadspace, category, api}) {
     return (
@@ -30,13 +31,14 @@ export default function Home({loadspace, category, api}) {
             <div>
                 <Navbar/>
                 <ESpaceCarousel />
-
                 <div className="container">
                     {loadspace.space.length !== 0 ? (
                             <ProductContent category={category} api={api} products={loadspace.space}/>
                         ) :
-                        (<div className="container">
-                            <p>Không có sản phẩm</p>
+                        (<div className="row">
+                            <Card className="col-xs-12 col-12 col-md-8 p-3" style={{minHeight: '18rem'}}>
+                                <p>Không có sản phẩm</p>
+                            </Card>
                         </div>)
                     }
                 </div>
