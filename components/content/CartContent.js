@@ -7,6 +7,7 @@ import util from "../util/util";
 
 import cartRequest from "../requests/cartRequests";
 import userRequest from "../requests/userRequests";
+import LoadingPage from "../LoadingPage";
 
 const {ACTION_ADD_TO_CART, ACTION_REMOVE_FROM_CART, ACTION_CLEAR_CART, ACTION_GET_CART, ACTION_UPDATE_ITEM_CART} = constants;
 const {ACTION_GET_USER_INFORMATION, ACTION_SET_USER_INFORMATION, ACTION_UPDATE_USER_INFORMATION, ACTION_DELETE_USER_INFORMATION, ACCESS_TOKEN} = constants;
@@ -85,19 +86,35 @@ const CartContent = (props) => {
         return cartRequest(payload);
     }
 
+    async function handleLoadUser() {
+        let userResponse = await requests.getData(`${api}/api/user/sso`, constants.ACCESS_TOKEN);
+        if (userResponse.message === "SUCCESS") {
+            let userResponseData = userResponse.data;
+            userResponseData.isLogin = true;
+            setUserData(userResponseData);
+            setUser(userResponseData);
+        } else {
+            setUser({});
+        }
+    }
+
     const [cartData, setCartData] = useState([]);
     const [chooseOption, setChooseOption] = useState(false);
-    const [user, setUser] = useState({})
+    const [userData, setUserData] = useState({});
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        setUser(getUser());
-        setCartData(getCart());
-        setChooseOption(false);
-
+        handleLoadUser().then(result => {
+            setUserData(getUser());
+            setCartData(getCart());
+            setChooseOption(false);
+            setLoading(true);
+        });
         return () => {
             setCartData([]);
             setChooseOption(false);
-            setUser({})
+            setUserData({})
+            setLoading(false);
         }
     }, [])
 
@@ -105,21 +122,21 @@ const CartContent = (props) => {
         let cart = getCart();
         let objectCart = {};
 
-        if (util.isBlank(user.user_sso)) {
+        if (util.isBlank(userData.user_sso)) {
             alert("Chưa cập nhật số điện thoại");
             document.getElementById("numberPhoneValidationFocus").focus();
             return;
-        } else if (util.isBlank(user.location)) {
+        } else if (util.isBlank(userData.location)) {
             alert("Chưa nhập địa chỉ giao hàng");
             document.getElementById("locationValidationFocus").focus();
             return;
         }
 
-        if (!user.isLogin) {
+        if (!userData.isLogin) {
             let loginUser = {
                 space: space,
-                user_sso: user.user_sso,
-                location: user.location,
+                user_sso: userData.user_sso,
+                location: userData.location,
             }
             let generateShortTermAccessToken = await requests.postData(
                 api.concat("/api/verify/generate-short-term-access-token"), loginUser);
@@ -135,7 +152,7 @@ const CartContent = (props) => {
                         action: ACTION_SET_USER_INFORMATION,
                         data: userResponseData
                     }
-                    setUser(userRequest(payloadShortUserLogin));
+                    setUserData(userRequest(payloadShortUserLogin));
                 } else {
                     alert("Tạo đơn hàng thất bại");
                     return;
@@ -146,9 +163,13 @@ const CartContent = (props) => {
         if (requests.getSessionStorage(ACCESS_TOKEN)) {
 
             let cartSelected = cart.filter(product => product.selected);
+            if (cartSelected.length === 0) {
+                alert("Chưa chọn sản phẩm, vui lòng check vào sản phẩm muốn đặt hàng.");
+                return;
+            }
             objectCart.outboxes = cartSelected.map(product => {
-                product.location = user.location;
-                product.user_sso = user.user_sso;
+                product.location = userData.location;
+                product.user_sso = userData.user_sso;
                 return product;
             });
 
@@ -179,47 +200,54 @@ const CartContent = (props) => {
             </div>
         )
     } else {
-        return (
-            <div className="row">
-                <div className="col-12 p-4 bg-white border border-radius justify-content-center mb-3 container-fluid">
-                    <div className="row">
-                        {
-                            chooseOption ? (
-                                <h3 className="col-6 col-md-3">
-                                    <Button className="badge badge-pill w-100" onClick={cancelChooseAll}
-                                            variant="secondary">{CANCEL_ALL_TEXT_INFO}</Button>
-                                </h3>
+        if(loading) {
+            return (
+                <div className="row">
+                    <div
+                        className="col-12 p-4 bg-white border border-radius justify-content-center mb-3 container-fluid">
+                        <div className="row">
+                            {
+                                chooseOption ? (
+                                    <h3 className="col-6 col-md-3">
+                                        <Button className="badge badge-pill w-100" onClick={cancelChooseAll}
+                                                variant="secondary">{CANCEL_ALL_TEXT_INFO}</Button>
+                                    </h3>
 
-                            ) : (
-                                <h3 className="col-6 col-md-3">
-                                    <Button className="badge badge-pill w-100" onClick={chooseAll}
-                                            variant="info"> {CHOOSE_ALL_TEXT_INFO} </Button>
-                                </h3>
-                            )
-                        }
-                        <h3 className="col-6 col-md-3">
-                            <Button className="badge badge-pill w-100" onClick={clearCart} variant="danger">Xóa toàn
-                                bộ.</Button>
-                        </h3>
+                                ) : (
+                                    <h3 className="col-6 col-md-3">
+                                        <Button className="badge badge-pill w-100" onClick={chooseAll}
+                                                variant="info"> {CHOOSE_ALL_TEXT_INFO} </Button>
+                                    </h3>
+                                )
+                            }
+                            <h3 className="col-6 col-md-3">
+                                <Button className="badge badge-pill w-100" onClick={clearCart} variant="danger">Xóa toàn
+                                    bộ.</Button>
+                            </h3>
+                        </div>
                     </div>
+
+                    <div className="col-xs-12 col-12 col-md-6">
+                        <h1 className="w-100"><span className="badge badge-secondary w-100">Thông tin đơn hàng</span>
+                        </h1>
+                        {cartData.map(product =>
+                            <CartItem key={product.index} api={api} actionCart={setCartData} product={product}/>
+                        )}
+                    </div>
+
+                    <RightNavigation user={userData} setUserData={setUserData} cartData={cartData}
+                                     sendRequest={sendRequest}/>
+
                 </div>
-
-                <div className="col-xs-12 col-12 col-md-6">
-                    <h1 className="w-100"><span className="badge badge-secondary w-100">Thông tin đơn hàng</span></h1>
-                    {cartData.map(product =>
-                        <CartItem key={product.index} api={api} actionCart={setCartData} product={product}/>
-                    )}
-                </div>
-
-                <RightNavigation user={user} setUser={setUser} cartData={cartData} sendRequest={sendRequest}/>
-
-            </div>
-        )
+            )
+        } else {
+            return (<LoadingPage />)
+        }
     }
 }
 
 const RightNavigation = (props) => {
-    const {cartData, sendRequest, user, setUser} = props;
+    const {cartData, sendRequest, user, setUserData} = props;
     let totalPrice = 0;
 
     function calculate() {
@@ -239,7 +267,7 @@ const RightNavigation = (props) => {
             <Card className="p-3 shadow w-100 mb-3" style={{width: '18rem'}}>
                 <h1 className="mb-5"><span
                     className="badge badge-warning text-white w-100"> Thông tin khách hàng </span></h1>
-                <Location userInformation={user} setUserInformation={setUser}/>
+                <Location userInformation={user} setUserInformation={setUserData}/>
                 <div className="line"></div>
                 <div className="input-group mt-4 mb-4">
                     <div className="input-group-prepend">

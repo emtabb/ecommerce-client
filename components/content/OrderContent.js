@@ -81,7 +81,7 @@ export default function OrderContent(props) {
                                                     <ListGroup variant="flush">
                                                         <ListGroupItem>Số lượng: {data.purchase}</ListGroupItem>
                                                         <ListGroupItem>
-                                                            <strong className="btn btn-info">Thành tiền: {util.beautyNumber(data.promotion)} đ
+                                                            <strong className="btn btn-info">Giá: {util.beautyNumber(data.promotion * data.purchase)} đ
                                                             </strong>
                                                         </ListGroupItem>
                                                     </ListGroup>
