@@ -198,9 +198,9 @@ function ProductCard(props) {
             <img className="card-img-top"
                  style={cardImageSubStyleSheet}
                  src={product.background === ""
-                     ? "https://blog.sqlauthority.com/wp-content/uploads/2007/06/null-500x259.png"
+                     ? "/null.jpg"
                      : `${api}/blob/${product.background}`} alt={product.description}/>
-            <div className="card-body flex-fill">
+            <div className="card-body flex-fill text-center">
                 <a href={"/san-pham/" + product.search_title}><h6>{product.label}</h6></a>
             </div>
             <div className="card-footer">
