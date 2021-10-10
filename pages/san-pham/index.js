@@ -29,7 +29,7 @@ export default function Home({loadspace, category, api}) {
             </Head>
             <div>
                 <Navbar/>
-                <div className="container">
+                <div className="container mt-3">
                     {loadspace.space.length !== 0 ? (
                             <ProductIndexContent category={category} api={api} products={loadspace.space}/>
                         ) :

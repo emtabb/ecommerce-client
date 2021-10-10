@@ -58,7 +58,7 @@ function ProductIndexContent(props) {
 
     if (loading) {
         return (
-            <div className="row mt-3" style={{marginBottom: "3rem"}}>
+            <div className="row" style={{marginBottom: "3rem"}}>
                 <div className="mb-2 mt-2 col-12 col-md-3 col-lg-3 container">
                     <ProductCategory categories={category} productsOrigin={products}
                                      dimensions={dimensions}
@@ -112,7 +112,7 @@ function ProductCategory(props) {
 
     if (dimensions.width < 450) {
         return (
-            <Card className="form-inline mt-5 fixed-top col-auto d-inline-block shadow">
+            <Card className="form-inline fixed-top col-auto d-inline-block shadow" style={{marginTop: "5.8rem"}}>
                 <ScrollMenu style={{height: "auto"}}>
                     <h3>
                         <Button
