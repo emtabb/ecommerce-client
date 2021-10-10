@@ -8,7 +8,7 @@ import cartRequest from "./requests/cartRequests";
 const { ACTION_GET_CART } = constants;
 const navbarData = [
     {
-        href: "/",
+        href: "/san-pham",
         src: "/coffee-menu.png",
         text: "Sản phẩm"
     },
@@ -47,7 +47,7 @@ function Navbar() {
         text: "Cá nhân"
     };
     return (
-        <nav className="navbar navbar-expand navbar-light bg-green-800 container-fluid justify-content-between shadow sticky-top">
+        <nav className="navbar navbar-expand navbar-light bg-success-800 container-fluid justify-content-between shadow sticky-top">
             <a className="navbar-brand" href="/">
                 {/*< FigureComponent>*/}
                 <img src="/gnikecoffee.jpeg" style={{width: "3.5rem", height: "3.5rem"}}
@@ -58,7 +58,7 @@ function Navbar() {
                     navbarData.map(data => {
                         return (
                             <li className="nav-item" key={data.href}>
-                                <a className={"badge ".concat(currentPath === data.href ? "bg-green-900" : "bg-green-800") } href={data.href}>
+                                <a className={"badge ".concat(currentPath === data.href ? "bg-success-900" : "bg-success-800") } href={data.href}>
                                     <FigureComponent
                                         style={{width: "3rem", height: "1.5rem"}}
                                         src={data.src}
@@ -75,7 +75,7 @@ function Navbar() {
                     })
                 }
             </ul>
-            <a className={"badge ".concat(currentPath === profile.href ? "bg-green-900" : "bg-green-800")} href={profile.href}>
+            <a className={"badge ".concat(currentPath === profile.href ? "bg-success-900" : "bg-success-800")} href={profile.href}>
                 <FigureComponent
                     style={{width: "3rem", height: "1.5rem"}}
                     src={profile.src}

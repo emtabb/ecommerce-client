@@ -10,7 +10,7 @@ import LoadingPage from "../LoadingPage";
 
 const {ACTION_ADD_TO_CART} = constants;
 
-function ProductContent(props) {
+function ProductIndexContent(props) {
     const {api, category} = props;
 
     const [products, setProducts] = useState([]);
@@ -58,24 +58,26 @@ function ProductContent(props) {
 
     if (loading) {
         return (
-            <div className="row mt-4" style={{marginBottom: "3rem"}}>
-                <div className="mt-2 mb-2 col-12 col-md-3 col-lg-3 container">
+            <div className="row mt-3" style={{marginBottom: "3rem"}}>
+                <div className="mb-2 mt-2 col-12 col-md-3 col-lg-3 container">
                     <ProductCategory categories={category} productsOrigin={products}
                                      dimensions={dimensions}
                                      setProductsCategory={setProductsCategory}/>
                 </div>
                 <div className="mt-2 col-12 col-md-8 col-lg-8">
-                    <ScrollMenu style={{height: "auto"}}>
-                        {
-                            productsCategory.length !== 0 ? productsCategory.map(product => {
-                                return (
-                                    <ProductCard api={api} cartAction={handleAddProductToCart}
-                                                 key={product._id}
-                                                 product={product}/>
-                                )
-                            }) : (<div className="text-center"> Không có sản phẩm </div>)
-                        }
-                    </ScrollMenu>
+                    <div className="container-fluid">
+                        <div className="row">
+                            {
+                                productsCategory.length !== 0 ? productsCategory.map(product => {
+                                    return (
+                                        <ProductCard api={api} cartAction={handleAddProductToCart}
+                                                     key={product._id}
+                                                     product={product}/>
+                                    )
+                                }) : (<div className="text-center"> Không có sản phẩm </div>)
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
         )
@@ -110,7 +112,7 @@ function ProductCategory(props) {
 
     if (dimensions.width < 450) {
         return (
-            <Card className="form-inline col-auto d-inline-block shadow" >
+            <Card className="form-inline mt-5 fixed-top col-auto d-inline-block shadow">
                 <ScrollMenu style={{height: "auto"}}>
                     <h3>
                         <Button
@@ -187,31 +189,36 @@ function ProductCard(props) {
 
     let cardImageSubStyleSheet = {
         borderRadius: borderRadius,
-        width: "100%", objectFit: "cover",
-        height: "15rem",
+        width: "100%",
+        height: "7rem"
     }
 
     return (
-        <div className="d-inline-block d-flex mr-3 ml-3 card"
-            style={cardSubStyleSheet}
-        >
-            <img className="card-img-top"
-                 style={cardImageSubStyleSheet}
-                 src={product.background === ""
-                     ? "/null.jpg"
-                     : `${api}/blob/${product.background}`} alt={product.description}/>
-            <div className="card-body flex-fill text-center">
-                <a href={"/san-pham/" + product.search_title}><h6>{product.label}</h6></a>
-            </div>
-            <div className="card-footer">
-                <div className="text-center mb-2 w-100">
-                    <div className="form-control d-sm-none w-100">{util.beautyNumber(product.promotion)} đ</div>
-                    <div className="form-control d-none d-sm-block">Giá: {util.beautyNumber(product.promotion)} đ</div>
+        <div className="col-12 d-inline-block p-3 mt-2 mb-2 shadow d-flex container-fluid card float-start">
+            <div className="row no-gutters">
+                <div className="col-4">
+                    <img className="card-img-top"
+                         style={cardImageSubStyleSheet}
+                         src={product.background === ""
+                             ? "/null.jpg"
+                             : `${api}/blob/${product.background}`} alt={product.description}/>
                 </div>
-                <button className="form-control btn btn-success w-100" onClick={addProductToCard}>Mua</button>
+                <div className="col-8">
+                    <div className="card-body flex-fill">
+                        <a className="float-start" href={"/san-pham/" + product.search_title}><h6>{product.label}</h6>
+                        </a>
+                        <div className="w-100">
+                            <div className="mb-2 float-end d-sm-none w-100">{util.beautyNumber(product.promotion)} đ</div>
+                            <div
+                                className="mb-2 float-end d-none d-sm-block w-100">Giá: {util.beautyNumber(product.promotion)} đ
+                            </div>
+                        </div>
+                        <button className="btn btn-success float-end" onClick={addProductToCard}>Thêm giỏ hàng</button>
+                    </div>
+                </div>
             </div>
         </div>
     )
 }
 
-export default ProductContent;
+export default ProductIndexContent;

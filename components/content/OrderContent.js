@@ -161,7 +161,7 @@ function OrderStatus(props) {
         }
     }, []);
 
-    if (dimensions.width < 550) {
+    if (dimensions.width < 450) {
         return (
             <div className="mb-2">
             <ScrollMenu style={{height: "auto" }}>

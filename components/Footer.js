@@ -7,7 +7,7 @@ class Footer extends React.Component {
 
     render() {
         return (
-            <footer className="footer bg-green-800" style={{height: "10rem"}}>
+            <footer className="footer bg-success-800" style={{height: "10rem"}}>
                 <div className="container">
                     <div className="row align-items-center justify-content-lg-between">
                         <div className="mb-lg-0 mb-4">
