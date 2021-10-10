@@ -54,7 +54,7 @@ export async function getServerSideProps() {
     const SPACE_NAME = process.env.SPACE_NAME;
     const api = process.env.ESPACE_API;
     const categoryRequest = process.env.CATEGORY_REQUEST;
-    const response = await axios.get(`${api}/api/loadspace/product?space=${SPACE_NAME}`);
+    const response = await axios.get(`${api}/api/loadspace/product?space=${SPACE_NAME}&pageable=release_date,-1,1,1000`);
     const categoryResponse = await axios.get(`${api.concat(categoryRequest)}`);
     const loadspace = response.data;
     const category = categoryResponse.data.space;
