@@ -68,8 +68,8 @@ function CarouselCaptionComponent() {
     return (
         <Card.Body className="bg-success-800" style={{padding : "0px !important"}}>
             <Card.Text>
-                <span className="btn btn-warning text-black-50">FREESHIP CHO ĐƠN HÀNG TỪ 50K!</span>
-                <a href="/san-pham" className="btn btn-primary float-end">Đặt ngay</a>
+                <span className="w-100 btn btn-warning text-black-50">FREESHIP CHO ĐƠN HÀNG TỪ 50K!</span>
+                <a href="/san-pham" className="btn btn-primary float-end mt-2">Đặt ngay</a>
             </Card.Text>
         </Card.Body>
     )
