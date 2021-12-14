@@ -1,11 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import FigureComponent from './FigureComponent';
 import {useRouter} from 'next/router'
 
-import constants from "./constants"
+import PopulateBackgroundColor from "../facade/populate/PopulateBackgroundColor";
 
-import cartRequest from "./requests/cartRequests";
-const { ACTION_GET_CART } = constants;
 const navbarData = [
     {
         href: "/san-pham",
@@ -24,22 +22,10 @@ const navbarData = [
     },
 ]
 
-function Navbar() {
+
+function Navbar({DEFAULT_COLOR, currentProductInCart}) {
     const router = useRouter();
     const currentPath = router.pathname;
-
-    const [currentProductInCart, setCurrentProductInCart] = useState(0);
-
-    useEffect( () => {
-        let payload = {
-            action: ACTION_GET_CART
-        }
-        setCurrentProductInCart(cartRequest(payload).length);
-
-        return () => {
-            setCurrentProductInCart(0)
-        }
-    }, [])
 
     const profile = {
         href: "/ca-nhan",
@@ -47,18 +33,21 @@ function Navbar() {
         text: "Cá nhân"
     };
     return (
-        <nav className="navbar navbar-expand navbar-light bg-success-800 container-fluid justify-content-between shadow sticky-top">
+        <nav className={"navbar navbar-expand navbar-light container-fluid justify-content-between shadow sticky-top "
+            .concat(PopulateBackgroundColor.populateBackground(DEFAULT_COLOR))}>
             <a className="navbar-brand" href="/">
                 {/*< FigureComponent>*/}
                 <img src="/gnikecoffee.jpeg" style={{width: "3.5rem", height: "3.5rem"}}
-                     className="d-inline-block align-top rounded-circle" alt="Gnik E Coffee" />
+                     className="d-inline-block align-top rounded-circle" alt="Gnik E Coffee"/>
             </a>
             <ul className="navbar-nav" style={{right: 0}}>
                 {
                     navbarData.map(data => {
                         return (
                             <li className="nav-item" key={data.href}>
-                                <a className={"badge ".concat(currentPath === data.href ? "bg-success-900" : "bg-success-800") } href={data.href}>
+                                <a className={"badge ".concat(currentPath === data.href
+                                    ? PopulateBackgroundColor.populateSelected(DEFAULT_COLOR)
+                                    : PopulateBackgroundColor.populateUnselected(DEFAULT_COLOR))} href={data.href}>
                                     <FigureComponent
                                         style={{width: "3rem", height: "1.5rem"}}
                                         src={data.src}
@@ -75,7 +64,10 @@ function Navbar() {
                     })
                 }
             </ul>
-            <a className={"badge ".concat(currentPath === profile.href ? "bg-success-900" : "bg-success-800")} href={profile.href}>
+            <a className={"badge ".concat(currentPath === profile.href
+                ? PopulateBackgroundColor.populateSelected(DEFAULT_COLOR)
+                : PopulateBackgroundColor.populateUnselected(DEFAULT_COLOR))}
+               href={profile.href}>
                 <FigureComponent
                     style={{width: "3rem", height: "1.5rem"}}
                     src={profile.src}
@@ -85,7 +77,6 @@ function Navbar() {
             </a>
         </nav>
     )
-
 }
 
 export default Navbar;

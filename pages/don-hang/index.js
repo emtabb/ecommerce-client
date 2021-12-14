@@ -6,6 +6,11 @@ import OrderContent from "../../components/content/OrderContent";
 import userRequest from "../../components/requests/userRequests";
 import Footer from "../../components/Footer";
 import {Card} from "react-bootstrap";
+import cartRequest from "../../components/requests/cartRequests";
+import AbstractPageFacade from "../../facade/AbstractPageFacade";
+
+const { ACTION_GET_CART } = constants;
+
 
 function getUser() {
     let payload = {
@@ -19,10 +24,13 @@ function getUser() {
     return user;
 }
 
-export default function Order({api}) {
+export default function Order({API, DEFAULT_COLOR, FOOTER_CONTACT, FOOTER_ADDRESS}) {
+    const api = API;
 
     const [order, setOrder] = useState({});
     const [user, setUser] = useState({});
+    const [loading, setLoading] = useState(false);
+    const [productsCart, setProductsCart] = useState([]);
 
     async function getOrderStatus() {
         let orderStatus = await requests.getData(api.concat("/api/workflow/order/status"), constants.ACCESS_TOKEN);
@@ -33,20 +41,34 @@ export default function Order({api}) {
         }
     }
 
+    const handleCartData = (data) => {
+        setProductsCart(data);
+        setLoading(true);
+    }
+
     useEffect(() => {
 
         getOrderStatus().then().catch();
         setUser(getUser());
+        let payload = {
+            action: ACTION_GET_CART
+        }
+        handleCartData(cartRequest(payload));
         return () => {
             setOrder({})
             setUser({})
+            setProductsCart([]);
+            setLoading(false);
         }
     }, [])
 
     return (
         <div className="bg-gray-100">
             <div>
-                <Navbar/>
+                {loading
+                    ? (<Navbar DEFAULT_COLOR={DEFAULT_COLOR} currentProductInCart={productsCart.length}/>)
+                    : (<Navbar DEFAULT_COLOR={DEFAULT_COLOR} currentProductInCart={0}/>)
+                }
                 <div className="container">
                     <div className="row">
                         {
@@ -73,17 +95,19 @@ export default function Order({api}) {
                     </div>
                 </div>
                 <div style={{height: "10rem"}}/>
-                <Footer/>
+                <Footer DEFAULT_COLOR={DEFAULT_COLOR}
+                        FOOTER_CONTACT={FOOTER_CONTACT}
+                        FOOTER_ADDRESS={FOOTER_ADDRESS}
+                />
             </div>
         </div>
     )
 }
 
-export async function getStaticProps() {
-    const api = process.env.ESPACE_API;
+export async function getServerSideProps() {
+
+    const serverData = AbstractPageFacade.initialEnvProperties();
     return {
-        props: {
-            api
-        }
+        props: serverData
     }
 }

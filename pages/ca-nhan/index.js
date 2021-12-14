@@ -6,6 +6,11 @@ import {Button, Card, Col, Form, Row, InputGroup} from "react-bootstrap";
 import userRequest from "../../components/requests/userRequests";
 import LoadingPage from "../../components/LoadingPage";
 import Footer from "../../components/Footer";
+import cartRequest from "../../components/requests/cartRequests";
+import AbstractPageFacade from "../../facade/AbstractPageFacade";
+
+const { ACTION_GET_CART } = constants;
+
 
 function getUser() {
     let payload = {
@@ -27,7 +32,11 @@ function setUser(data) {
     return userRequest(payload)
 }
 
-export default function PersonalInformation({api, SPACE_NAME}) {
+export default function PersonalInformation({API, SPACE_NAME, DEFAULT_COLOR, FOOTER_ADDRESS, FOOTER_CONTACT}) {
+
+    const api = API;
+
+    const [productsCart, setProductsCart] = useState([]);
 
     const [userInformation, setUserInformation] = useState({});
     const [userData, setUserData] = useState({});
@@ -118,9 +127,17 @@ export default function PersonalInformation({api, SPACE_NAME}) {
         }
     }
 
+    const handleCartData = (data) => {
+        setProductsCart(data);
+        setLoading(true);
+    }
+
     useEffect(() => {
         handleLoadUserInformation().then().catch();
-        setLoading(true);
+        let payload = {
+            action: ACTION_GET_CART
+        }
+        handleCartData(cartRequest(payload));
         return () => {
             setUserInformation({});
             setUserData({});
@@ -145,7 +162,10 @@ export default function PersonalInformation({api, SPACE_NAME}) {
             return (
                 <div>
                     <div>
-                        <Navbar/>
+                        {loading
+                            ? (<Navbar DEFAULT_COLOR={DEFAULT_COLOR} currentProductInCart={productsCart.length}/>)
+                            : (<Navbar DEFAULT_COLOR={DEFAULT_COLOR} currentProductInCart={0}/>)
+                        }
                         <div className="container mt-5 mb-5">
                             <div className="row">
                                 <div className="alert alert-warning alert-dismissible fade show" role="alert">
@@ -176,18 +196,17 @@ export default function PersonalInformation({api, SPACE_NAME}) {
                                                                       }}
                                                                       placeholder="..."/>
                                                     </Form.Group>
-
-                                                    <Form.Group as={Col}>
-                                                        <Form.Label>Số điện thoại</Form.Label>
-                                                        <InputGroup className="mb-3">
-                                                            <InputGroup.Text>+84</InputGroup.Text>
-                                                            <Form.Control value={userData.user_sso}
-                                                                          placeholder="..."
-                                                                          readOnly
-                                                            />
-                                                        </InputGroup>
-                                                    </Form.Group>
                                                 </Row>
+                                                <Form.Group>
+                                                    <Form.Label>Số điện thoại</Form.Label>
+                                                    <InputGroup className="mb-3">
+                                                        <InputGroup.Text>+84</InputGroup.Text>
+                                                        <Form.Control value={userData.user_sso}
+                                                                      placeholder="..."
+                                                                      readOnly
+                                                        />
+                                                    </InputGroup>
+                                                </Form.Group>
 
                                                 <Form.Group className="mb-3">
                                                     <Form.Label>Mật khẩu</Form.Label>
@@ -227,7 +246,10 @@ export default function PersonalInformation({api, SPACE_NAME}) {
                             </div>
                         </div>
                         <div style={{height: "5rem"}}/>
-                        <Footer />
+                        <Footer DEFAULT_COLOR={DEFAULT_COLOR}
+                                FOOTER_CONTACT={FOOTER_CONTACT}
+                                FOOTER_ADDRESS={FOOTER_ADDRESS}
+                        />
                     </div>
                 </div>
             )
@@ -238,7 +260,7 @@ export default function PersonalInformation({api, SPACE_NAME}) {
             return (
                 <div>
                     <div>
-                        <Navbar/>
+                        <Navbar DEFAULT_COLOR={DEFAULT_COLOR} productsCart={productsCart}/>
                         <div className="container mt-5 mb-5">
                             <div className="row">
                                 <div className="col-12 col-sm-6 p-4">
@@ -260,21 +282,21 @@ export default function PersonalInformation({api, SPACE_NAME}) {
                                                             setFirstname(event.target.value)
                                                         }}/>
                                                     </Form.Group>
-
-                                                    <Form.Group as={Col}>
-                                                        <Form.Label>Số điện thoại</Form.Label>
-                                                        <InputGroup className="mb-3">
-                                                            <InputGroup.Text>+84</InputGroup.Text>
-                                                            <Form.Control value={numberPhone}
-                                                                          onChange={(event) => {
-                                                                              setNumberPhone(event.target.value)
-                                                                          }}
-                                                                          placeholder="..."
-                                                                          readOnly
-                                                            />
-                                                        </InputGroup>
-                                                    </Form.Group>
                                                 </Row>
+
+                                                <Form.Group>
+                                                    <Form.Label>Số điện thoại</Form.Label>
+                                                    <InputGroup className="mb-3">
+                                                        <InputGroup.Text>+84</InputGroup.Text>
+                                                        <Form.Control value={numberPhone}
+                                                                      onChange={(event) => {
+                                                                          setNumberPhone(event.target.value)
+                                                                      }}
+                                                                      placeholder="..."
+                                                                      readOnly
+                                                        />
+                                                    </InputGroup>
+                                                </Form.Group>
 
                                                 <Form.Group className="mb-3">
                                                     <Form.Label>Địa chỉ</Form.Label>
@@ -305,7 +327,10 @@ export default function PersonalInformation({api, SPACE_NAME}) {
                             </div>
                         </div>
                         <div style={{height: "5rem"}}/>
-                        <Footer/>
+                        <Footer DEFAULT_COLOR={DEFAULT_COLOR}
+                                FOOTER_CONTACT={FOOTER_CONTACT}
+                                FOOTER_ADDRESS={FOOTER_ADDRESS}
+                        />
                     </div>
                 </div>
             )
@@ -316,7 +341,7 @@ export default function PersonalInformation({api, SPACE_NAME}) {
             return (
                 <div>
                     <div>
-                        <Navbar/>
+                        <Navbar DEFAULT_COLOR={DEFAULT_COLOR} productsCart={productsCart}/>
                         <div className="container mt-5 mb-5">
                             <div className="row">
                                 <div className="col-12 col-sm-6 p-3">
@@ -363,7 +388,10 @@ export default function PersonalInformation({api, SPACE_NAME}) {
                             </div>
                         </div>
                         <div style={{height: "5rem"}}/>
-                        <Footer />
+                        <Footer DEFAULT_COLOR={DEFAULT_COLOR}
+                                FOOTER_CONTACT={FOOTER_CONTACT}
+                                FOOTER_ADDRESS={FOOTER_ADDRESS}
+                        />
                     </div>
                 </div>
             )
@@ -371,14 +399,10 @@ export default function PersonalInformation({api, SPACE_NAME}) {
     }
 }
 
-export async function getStaticProps() {
-    const SPACE_NAME = process.env.SPACE_NAME;
-    const api = process.env.ESPACE_API
+export async function getServerSideProps() {
+    const serverData = AbstractPageFacade.initialEnvProperties();
 
     return {
-        props: {
-            SPACE_NAME,
-            api,
-        }
+        props: serverData
     }
 }

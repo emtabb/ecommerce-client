@@ -3,9 +3,10 @@ import axios from "axios";
 import Navbar from "../../components/Navbar";
 import ProductView from "../../components/content/ProductView";
 import Head from "next/head";
-import Footer from "../../components/Footer";
+import AbstractPageFacade from "../../facade/AbstractPageFacade";
 
-const ProductDetailPage = ({product, api, searchProduct}) => {
+const ProductDetailPage = ({product, API, searchProduct}) => {
+    const api = API;
     return (
         <div className="bg-gray-100">
             <Head>
@@ -36,23 +37,17 @@ const ProductDetailPage = ({product, api, searchProduct}) => {
                         }
                     </div>
                 </div>
-                <Footer/>
             </div>
         </div>
     )
 }
 
 export async function getServerSideProps(context) {
-    const api = process.env.ESPACE_API;
-    const spaceName = process.env.SPACE_NAME;
-    const searchProduct = context.params.searchProduct;
-    const product = (await axios.get(`${api}/api/loadspace/product?space=${spaceName}&search_title=${searchProduct}`)).data.space[0];
+    const serverData = AbstractPageFacade.initialEnvProperties();
+    serverData.searchProduct = context.params.searchProduct;
+    serverData.product = (await axios.get(`${serverData.API}/api/loadspace/product?space=${serverData.SPACE_NAME}&search_title=${serverData.searchProduct}`)).data.space[0];
     return {
-        props: {
-            api,
-            product,
-            searchProduct : searchProduct,
-        }
+        props: serverData
     }
 }
 

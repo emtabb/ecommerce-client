@@ -1,13 +1,39 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import ProductContent from "../components/content/ProductContent";
 import ESpaceCarousel from "../components/ESpaceCarousel";
+import cartRequest from "../components/requests/cartRequests";
 import Head from "next/head";
 import Footer from "../components/Footer";
 import {Card} from "react-bootstrap";
+import constants from "../components/constants";
+import AbstractPageFacade from "../facade/AbstractPageFacade";
 
-export default function Home({loadspace, category, api}) {
+const {ACTION_GET_CART} = constants;
+
+
+export default function Home({loadspace, category, API, SPACE_NAME, DEFAULT_COLOR, FOOTER_CONTACT, FOOTER_ADDRESS}) {
+
+    const api = API;
+    const [productsCart, setProductsCart] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const handleCartData = async (data) => {
+        await setProductsCart(data);
+        await setLoading(true);
+    }
+    useEffect(() => {
+        let payload = {
+            action: ACTION_GET_CART
+        }
+        handleCartData(cartRequest(payload)).then();
+        return () => {
+            setProductsCart([]);
+            setLoading(false);
+        }
+    }, []);
+
     return (
         <div>
             <Head>
@@ -29,11 +55,18 @@ export default function Home({loadspace, category, api}) {
                 <meta property="og:image:alt" content=""/>
             </Head>
             <div>
-                <Navbar/>
-                <ESpaceCarousel/>
+                {loading
+                    ? (<Navbar DEFAULT_COLOR={DEFAULT_COLOR} currentProductInCart={productsCart.length}/>)
+                    : (<Navbar DEFAULT_COLOR={DEFAULT_COLOR} currentProductInCart={0} />)
+                }
+
+                <ESpaceCarousel SPACE_NAME={SPACE_NAME} DEFAULT_COLOR={DEFAULT_COLOR}/>
                 <div className="container">
                     {loadspace.space.length !== 0 ? (
-                            <ProductContent category={category} api={api} products={loadspace.space}/>
+                            <ProductContent category={category} api={api} products={loadspace.space}
+                                            DEFAULT_COLOR={DEFAULT_COLOR}
+                                            setProductsCart={handleCartData}
+                            />
                         ) :
                         (<div className="row">
                             <div className="col-xs-12 col-12 col-md-8">
@@ -45,25 +78,21 @@ export default function Home({loadspace, category, api}) {
                     }
                 </div>
             </div>
-            <Footer></Footer>
+            <Footer DEFAULT_COLOR={DEFAULT_COLOR}
+                    FOOTER_CONTACT={FOOTER_CONTACT}
+                    FOOTER_ADDRESS={FOOTER_ADDRESS}
+            />
         </div>
     )
 }
 
 export async function getServerSideProps() {
-    const SPACE_NAME = process.env.SPACE_NAME;
-    const api = process.env.ESPACE_API;
-    const categoryRequest = process.env.CATEGORY_REQUEST;
-    const response = await axios.get(`${api}/api/loadspace/product?space=${SPACE_NAME}&pageable=release_date,-1,1,1000`);
-    const categoryResponse = await axios.get(`${api.concat(categoryRequest)}`);
-    const loadspace = response.data;
-    const category = categoryResponse.data.space;
-
+    const serverData = AbstractPageFacade.initialEnvProperties();
+    const response = await axios.get(`${serverData.API}/api/loadspace/product?space=${serverData.SPACE_NAME}&pageable=release_date,-1,1,1000`);
+    const categoryResponse = await axios.get(`${serverData.API.concat(serverData.CATEGORY_REQUEST)}`);
+    serverData.loadspace = response.data;
+    serverData.category = categoryResponse.data.space;
     return {
-        props: {
-            loadspace,
-            api,
-            category,
-        }
+        props: serverData
     }
 }

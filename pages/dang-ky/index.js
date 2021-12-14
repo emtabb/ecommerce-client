@@ -4,15 +4,24 @@ import React, {useEffect, useState} from "react";
 import requests from "../../components/requests";
 import constants from "../../components/constants";
 import Footer from "../../components/Footer";
+import cartRequest from "../../components/requests/cartRequests";
+import AbstractPageFacade from "../../facade/AbstractPageFacade";
 
-function RegisterPage({api, SPACE_NAME}) {
+const { ACTION_GET_CART } = constants;
 
+
+function RegisterPage({API, SPACE_NAME, DEFAULT_COLOR, FOOTER_ADDRESS, FOOTER_CONTACT}) {
+
+    const api = API;
+
+    const [productsCart, setProductsCart] = useState([]);
     const [numberPhone, setNumberPhone] = useState("");
     const [password, setPassword] = useState("");
     const [rewritePassword, setRewritePassword] = useState("");
     const [location, setLocation] = useState("");
     const [loginForm, setLoginForm] = useState({});
     const [isLogin, setLogin] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [missMatchPassword, setMissMatchPassword] = useState(false);
 
     async function handleSignUpAccount() {
@@ -37,20 +46,33 @@ function RegisterPage({api, SPACE_NAME}) {
         }
     }
 
-    useEffect(() => {
+    const handleCartData = (data) => {
+        setProductsCart(data);
+        setLoading(true);
+    }
 
+    useEffect(() => {
+        let payload = {
+            action: ACTION_GET_CART
+        }
+
+        handleCartData(cartRequest(payload));
         return () => {
             setLogin(false);
             setPassword("");
             setNumberPhone("");
             setMissMatchPassword(false);
+            setProductsCart([]);
         };
     }, []);
 
     return (
         <div>
             <div>
-                <Navbar/>
+                {loading
+                    ? (<Navbar DEFAULT_COLOR={DEFAULT_COLOR} currentProductInCart={productsCart.length}/>)
+                    : (<Navbar DEFAULT_COLOR={DEFAULT_COLOR} currentProductInCart={0}/>)
+                }
                 <div className="container mt-5 mb-5">
                     <div className="row">
                         <Card className="d-flex col-12 col-sm-6 justify-content-center" border="dark">
@@ -111,21 +133,20 @@ function RegisterPage({api, SPACE_NAME}) {
                         </Card>
                     </div>
                 </div>
-                <Footer/>
+                <Footer DEFAULT_COLOR={DEFAULT_COLOR}
+                    FOOTER_CONTACT={FOOTER_CONTACT}
+                    FOOTER_ADDRESS={FOOTER_ADDRESS}
+                />
             </div>
         </div>
     )
 }
 
-export async function getStaticProps() {
-    const SPACE_NAME = process.env.SPACE_NAME;
-    const api = process.env.ESPACE_API
+export async function getServerSideProps() {
+    const serverData = AbstractPageFacade.initialEnvProperties();
 
     return {
-        props: {
-            SPACE_NAME,
-            api,
-        }
+        props: serverData
     }
 }
 

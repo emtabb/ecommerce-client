@@ -7,15 +7,15 @@ import cartRequest from "../requests/cartRequests";
 import ListGroup from "react-bootstrap/ListGroup";
 import {Button, Card} from "react-bootstrap";
 import LoadingPage from "../LoadingPage";
+import PopulateBackgroundColor from "../../facade/populate/PopulateBackgroundColor";
 
 const {ACTION_ADD_TO_CART} = constants;
 
 function ProductIndexContent(props) {
-    const {api, category} = props;
+    const {api, category, setProductsCart, DEFAULT_COLOR} = props;
 
     const [products, setProducts] = useState([]);
     const [productsCategory, setProductsCategory] = useState([]);
-    const [productsCart, setProductsCart] = useState([]);
     const [loading, setLoading] = useState(false);
     const [dimensions, setDimensions] = useState({});
 
@@ -62,7 +62,9 @@ function ProductIndexContent(props) {
                 <div className="mb-2 mt-2 col-12 col-md-3 col-lg-3 container">
                     <ProductCategory categories={category} productsOrigin={products}
                                      dimensions={dimensions}
-                                     setProductsCategory={setProductsCategory}/>
+                                     setProductsCategory={setProductsCategory}
+                                     DEFAULT_COLOR={DEFAULT_COLOR}
+                    />
                 </div>
                 <div className="mt-2 col-12 col-md-8 col-lg-8">
                     <div className="container-fluid">
@@ -72,7 +74,9 @@ function ProductIndexContent(props) {
                                     return (
                                         <ProductCard api={api} cartAction={handleAddProductToCart}
                                                      key={product._id}
-                                                     product={product}/>
+                                                     product={product}
+                                                     DEFAULT_COLOR={DEFAULT_COLOR}
+                                        />
                                     )
                                 }) : (<div className="text-center"> Không có sản phẩm </div>)
                             }
@@ -89,7 +93,7 @@ function ProductIndexContent(props) {
 
 function ProductCategory(props) {
 
-    const {categories, productsOrigin, setProductsCategory, dimensions} = props;
+    const {categories, productsOrigin, setProductsCategory, dimensions, DEFAULT_COLOR} = props;
 
     function handleOnClickMenuItem(key) {
         setCategory(key);
@@ -116,9 +120,14 @@ function ProductCategory(props) {
                 <ScrollMenu style={{height: "auto"}}>
                     <h3>
                         <Button
-                            className={"badge badge-pill m-2 p-2 " + ("ALL" === category ? "text-white" : "text-success")}
+                            className={"badge badge-pill m-2 p-2 " + ("ALL" === category
+                                ? "text-white"
+                                : PopulateBackgroundColor.populateText(DEFAULT_COLOR))}
                             key={"ALL"}
-                            variant={"ALL" === category ? "success" : "outline-success"}
+                            variant={"ALL" === category
+                                ? PopulateBackgroundColor.populateAvailableState(DEFAULT_COLOR)
+                                : PopulateBackgroundColor.populateUnAvailableState(DEFAULT_COLOR)
+                            }
                             onClick={() => {
                                 handleOnClickMenuItem("ALL")
                             }}
@@ -128,12 +137,17 @@ function ProductCategory(props) {
                         categories.map(cate => (
                             <h3 key={cate.key}>
                                 <Button
-                                    className={"badge badge-pill m-2 p-2 " + (cate.key === category ? "text-white" : "text-success")}
-                                    variant={cate.key === category ? "success" : "outline-success"}
+                                    className={"badge badge-pill m-2 p-2 " + (cate.key === category
+                                        ? "text-white"
+                                        : PopulateBackgroundColor.populateText(DEFAULT_COLOR))}
+                                    variant={cate.key === category
+                                        ? PopulateBackgroundColor.populateAvailableState(DEFAULT_COLOR)
+                                        : PopulateBackgroundColor.populateUnAvailableState(DEFAULT_COLOR)
+                                    }
                                     onClick={() => {
                                         handleOnClickMenuItem(cate.key)
                                     }}
-                                    style={{color: "green"}}
+                                    style={{color: PopulateBackgroundColor.populateColor(DEFAULT_COLOR)}}
                                 > {cate.value}
                                 </Button>
                             </h3>
@@ -147,7 +161,10 @@ function ProductCategory(props) {
             <ListGroup className="border shadow w-100">
                 <ListGroup.Item>
                     <Button className="w-100 flex-fill"
-                            variant={"ALL" === category ? "success" : "outline-success"}
+                            variant={"ALL" === category
+                                ? PopulateBackgroundColor.populateAvailableState(DEFAULT_COLOR)
+                                : PopulateBackgroundColor.populateUnAvailableState(DEFAULT_COLOR)
+                            }
                             onClick={() => {
                                 handleOnClickMenuItem("ALL")
                             }}
@@ -157,7 +174,10 @@ function ProductCategory(props) {
                     categories.map(cate => (
                         <ListGroup.Item key={cate.key}>
                             <Button className="w-100 flex-fill"
-                                    variant={cate.key === category ? "success" : "outline-success"}
+                                    variant={cate.key === category
+                                        ? PopulateBackgroundColor.populateAvailableState(DEFAULT_COLOR)
+                                        : PopulateBackgroundColor.populateUnAvailableState(DEFAULT_COLOR)
+                                    }
                                     onClick={() => {
                                         handleOnClickMenuItem(cate.key)
                                     }}
@@ -171,7 +191,7 @@ function ProductCategory(props) {
 }
 
 function ProductCard(props) {
-    const {cartAction, api, product} = props;
+    const {cartAction, api, product, DEFAULT_COLOR} = props;
 
     function addProductToCard() {
         product.purchase = 1;
@@ -197,8 +217,7 @@ function ProductCard(props) {
         <div className="col-12 d-inline-block p-3 mt-2 mb-2 shadow d-flex container-fluid card float-start">
             <div className="row no-gutters">
                 <div className="col-4">
-                    <img className="card-img-top"
-                         style={cardImageSubStyleSheet}
+                    <img className="card-img-top product-item-image"
                          src={product.background === ""
                              ? "/null.jpg"
                              : `${api}/blob/${product.background}`} alt={product.description}/>
@@ -213,7 +232,7 @@ function ProductCard(props) {
                                 className="mb-2 float-end d-none d-sm-block w-100">Giá: {util.beautyNumber(product.promotion)} đ
                             </div>
                         </div>
-                        <button className="btn btn-success float-end" onClick={addProductToCard}>Thêm giỏ hàng</button>
+                        <button className={"float-end btn btn-".concat(DEFAULT_COLOR)} onClick={addProductToCard}>Thêm giỏ hàng</button>
                     </div>
                 </div>
             </div>

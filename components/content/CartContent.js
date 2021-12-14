@@ -8,6 +8,7 @@ import util from "../util/util";
 import cartRequest from "../requests/cartRequests";
 import userRequest from "../requests/userRequests";
 import LoadingPage from "../LoadingPage";
+import PopulateBackgroundColor from "../../facade/populate/PopulateBackgroundColor";
 
 const {ACTION_ADD_TO_CART, ACTION_REMOVE_FROM_CART, ACTION_CLEAR_CART, ACTION_GET_CART, ACTION_UPDATE_ITEM_CART} = constants;
 const {ACTION_GET_USER_INFORMATION, ACTION_SET_USER_INFORMATION, ACTION_UPDATE_USER_INFORMATION, ACTION_DELETE_USER_INFORMATION, ACCESS_TOKEN} = constants;
@@ -34,7 +35,7 @@ function setUser(userData) {
 
 const CartContent = (props) => {
 
-    const {api, space} = props;
+    const {api, space, DEFAULT_COLOR} = props;
     const CHOOSE_ALL_TEXT_INFO = "Chọn tất cả";
     const CANCEL_ALL_TEXT_INFO = "Hủy chọn tất cả";
 
@@ -191,7 +192,7 @@ const CartContent = (props) => {
     }
 
 
-    if (cartData.length === 0 || !Array.isArray(cartData)) {
+    if (cartData.length === 0) {
         return (
             <div className="row">
                 <Card className="col-xs-12 col-12 col-md-8 p-3" style={{minHeight: '18rem'}}>
@@ -236,7 +237,8 @@ const CartContent = (props) => {
                     </div>
 
                     <RightNavigation user={userData} setUserData={setUserData} cartData={cartData}
-                                     sendRequest={sendRequest}/>
+                                     sendRequest={sendRequest} DEFAULT_COLOR={DEFAULT_COLOR}
+                    />
 
                 </div>
             )
@@ -247,7 +249,7 @@ const CartContent = (props) => {
 }
 
 const RightNavigation = (props) => {
-    const {cartData, sendRequest, user, setUserData} = props;
+    const {cartData, sendRequest, user, setUserData, DEFAULT_COLOR} = props;
     let totalPrice = 0;
 
     function calculate() {
@@ -278,11 +280,16 @@ const RightNavigation = (props) => {
                         <span className="input-group-text"> đ</span>
                     </div>
                 </div>
-                <div className="w-100">
-                    <Button className="w-100" onClick={sendRequest} variant="success"><h3> Tạo đơn hàng </h3></Button>
-                </div>
-                <div className="line"></div>
+                <div className="line"/>
             </Card>
+
+            <div className="w-100 d-flex align-items-center justify-content-center fixed-bottom">
+                <Button size="lg" className="w-75" onClick={sendRequest}
+                        variant={PopulateBackgroundColor.populateVariant(DEFAULT_COLOR)}
+                >
+                    <small>Tạo đơn hàng: - {util.beautyNumber(totalPrice)} đ </small>
+                </Button>
+            </div>
         </div>
     )
 }

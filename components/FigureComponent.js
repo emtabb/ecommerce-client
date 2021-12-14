@@ -12,7 +12,7 @@ const FigureComponent = (props) => {
                 {text}
                 {
                     notification !== undefined && notification != null ?
-                        <span className="badge badge-pill badge-danger">{notification}</span> : <></>
+                        <span className="badge badge-pill badge-danger zoom-notification">{notification}</span> : <></>
                 }
             </figcaption>
         </>
