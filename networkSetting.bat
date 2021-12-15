@@ -1,5 +1,5 @@
 @echo off
-TITLE Modifying your HOSTS file
+TITLE Modifying your NETWORK file
 COLOR F0
 ECHO.
 
