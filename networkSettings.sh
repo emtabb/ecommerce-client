@@ -19,4 +19,5 @@ then
     done <<< "done"
 else
     echo "Adding new vpn settings."
+    echo "$host_entry" | sudo tee -a /etc/hosts > /dev/null
 fi
