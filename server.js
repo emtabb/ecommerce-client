@@ -1,4 +1,4 @@
-require('dotenv').config({path : "./configuration/.env.local"})
+require('dotenv').config({path : "./configuration/.env.production"})
 const {createServer} = require('http');
 const {parse} = require('url');
 const {readFileSync} = require('fs');

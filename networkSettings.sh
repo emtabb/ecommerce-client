@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # insert/update hosts entry
-ip_address="35.194.152.212"
+ip_address="35.234.47.214"
 host_name="espace.izanami.service.com"
 # find existing instances in the host file and save the line numbers
 matches_in_hosts="$(grep -n $host_name /etc/hosts | cut -f1 -d:)"
@@ -16,7 +16,7 @@ then
     while read -r line_number; do
         # replace the text of each line with the desired host entry
         sudo sed -i '' "${line_number}s/.*/vpn /" /etc/hosts
-    done <<< "done"
+    done
 else
     echo "Adding new vpn settings."
     echo "$host_entry" | sudo tee -a /etc/hosts > /dev/null
