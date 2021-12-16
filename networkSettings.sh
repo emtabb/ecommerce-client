@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # insert/update hosts entry
-ip_address="35.206.235.151"
-host_name="espaceizanami-prod-db.asia-east1-b.c.emtabb"
+ip_address="35.194.152.212"
+host_name="espace.izanami.service.com"
 # find existing instances in the host file and save the line numbers
 matches_in_hosts="$(grep -n $host_name /etc/hosts | cut -f1 -d:)"
 host_entry="${ip_address} ${host_name}"

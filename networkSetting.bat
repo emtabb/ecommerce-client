@@ -28,6 +28,6 @@ SET NEWLINE=^& echo.
 ECHO Carrying out requested modifications to your HOSTS file
 FIND /C /I "mydomain.com" %WINDIR%\system32\drivers\etc\hosts
 IF %ERRORLEVEL% NEQ 0 ECHO %NEWLINE%>>%WINDIR%\system32\drivers\etc\hosts
-IF %ERRORLEVEL% NEQ 0 ECHO 35.206.235.151 espaceizanami-prod-db.asia-east1-b.c.emtabb>>%WINDIR%\system32\drivers\etc\hosts
+IF %ERRORLEVEL% NEQ 0 ECHO 35.194.152.212 espace.izanami.service.com>>%WINDIR%\system32\drivers\etc\hosts
 ECHO Finished
 GOTO END

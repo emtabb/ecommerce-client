@@ -5,7 +5,7 @@ const {readFileSync} = require('fs');
 const next = require('next');
 const express = require("express");
 const { createProxyMiddleware } = require('http-proxy-middleware');
-const port = 80;
+const port = 3000;
 const production = process.env.NODE_ENV === 'production';
 const app = next({production});
 const handle = app.getRequestHandler();
