@@ -2,8 +2,22 @@ import '../styles/globals.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from "react";
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+import App from 'next/app'
+import { ThemeProvider } from 'styled-components'
+
+const theme = {
+  colors: {
+    primary: '#0070f3',
+  },
 }
 
-export default MyApp
+export default class MyApp extends App {
+  render() {
+    const { Component, pageProps } = this.props
+    return (
+      <ThemeProvider theme={theme}>
+        <Component {...pageProps} />
+      </ThemeProvider>
+    )
+  }
+}
