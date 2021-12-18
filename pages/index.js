@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/Header/Navbar";
 import ProductContent from "../components/content/ProductContent";
 import ESpaceCarousel from "../components/ESpaceCarousel";
 import cartRequest from "../components/requests/cartRequests";

@@ -8,10 +8,19 @@ import PopulateBackgroundColor from "../facade/populate/PopulateBackgroundColor"
 
 const advertisementAPI = "/api/advertisement";
 
+const mockAdvertisement = [
+    {
+        "_id" : "",
+        "redirect" : "",
+        "background" : "/gnikecoffee.jpeg",
+        "name" : "",
+    }
+]
+
 async function loadAdvertisements(SPACE_NAME, func) {
-    const api = advertisementAPI.concat(`/get?space=${SPACE_NAME}`);
-    let response = await requests.getData(api, constants.ACCESS_TOKEN);
-    func(response.space);
+    // const api = advertisementAPI.concat(`/get?space=${SPACE_NAME}`);
+    // let response = await requests.getData(api, constants.ACCESS_TOKEN);
+    func([]);
 }
 
 export default function ESpaceCarousel({DEFAULT_COLOR, SPACE_NAME}) {
@@ -42,57 +51,13 @@ export default function ESpaceCarousel({DEFAULT_COLOR, SPACE_NAME}) {
                                                   src={"/blob/".concat(ad.background)}
                                                   alt={ad.name}
                                         />
-                                        <CarouselCaptionComponent DEFAULT_COLOR={DEFAULT_COLOR} content={ad.value} />
+                                        {/* <CarouselCaptionComponent DEFAULT_COLOR={DEFAULT_COLOR} content={ad.value} /> */}
                                     </Card>
                                 </a>
                             </Carousel.Item>
                         )
                     })
                 }
-            {/*    <Carousel.Item interval={2500} className="flex-fill">*/}
-            {/*        <a href="/san-pham">*/}
-            {/*            <Card>*/}
-            {/*                <Card.Img className="d-block w-100 espaceCarousel"*/}
-            {/*                          src="/cappuchino.jpg"*/}
-            {/*                          alt="GNIKE COFFEE: Cappuchino"*/}
-            {/*                />*/}
-            {/*                <CarouselCaptionComponent content={"Khuyến mãi 50% khi mua mang về"} />*/}
-            {/*            </Card>*/}
-            {/*        </a>*/}
-            {/*    </Carousel.Item>*/}
-            {/*    <Carousel.Item interval={2500} className="flex-fill">*/}
-            {/*        <a href="/san-pham">*/}
-            {/*            <Card>*/}
-            {/*                <Card.Img className="d-block w-100 espaceCarousel"*/}
-            {/*                          src="/soda.jpg"*/}
-            {/*                          alt="GNIKE COFFEE: Soda"*/}
-            {/*                />*/}
-            {/*                <CarouselCaptionComponent />*/}
-            {/*            </Card>*/}
-            {/*        </a>*/}
-            {/*    </Carousel.Item>*/}
-            {/*    <Carousel.Item interval={2500} className="flex-fill">*/}
-            {/*        <a href="/san-pham">*/}
-            {/*            <Card>*/}
-            {/*                <Card.Img className="d-block w-100 espaceCarousel"*/}
-            {/*                          src="/tra-trai-cay.jpg"*/}
-            {/*                          alt="GNIKE COFFEE: Tea"*/}
-            {/*                />*/}
-            {/*                <CarouselCaptionComponent />*/}
-            {/*            </Card>*/}
-            {/*        </a>*/}
-            {/*    </Carousel.Item>*/}
-            {/*    <Carousel.Item interval={2500} className="flex-fill">*/}
-            {/*        <a href="/san-pham">*/}
-            {/*            <Card>*/}
-            {/*                <Card.Img className="d-block w-100 espaceCarousel"*/}
-            {/*                          src="/ca-phe-mix.jpg"*/}
-            {/*                          alt="GNIKE COFFEE: Cappuchino"*/}
-            {/*                />*/}
-            {/*                <CarouselCaptionComponent />*/}
-            {/*            </Card>*/}
-            {/*        </a>*/}
-            {/*    </Carousel.Item>*/}
             </Carousel>
         )
     } else {
