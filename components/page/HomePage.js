@@ -1,7 +1,7 @@
 import React from "react";
 
 import MainContent from '../content/MainContent';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/Header/Navbar';
 import requests from '../requests';
 import constants from "../constants";
 

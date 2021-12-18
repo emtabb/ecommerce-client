@@ -7,11 +7,13 @@
     "ssg": "next build && next dev",
     "build": "next build",
     "build:dev" : "set NODE_ENV=development  & next build",
+    "build:production" : "set NODE_ENV=production  & next build",
     "start": "next start -p 4000",
-    "start:development": "node server.js",
+    "start:development": "NODE_ENV=development ENV=development node server.js",
     "start:production": "NODE_ENV=production ENV=production node server.js",
     "start-prod": "next start -p 443",
-    "lint": "next lint"
+    "lint": "next lint",
+    "clean:unix": "rm -rf .next"
   },
   "dependencies": {
     "bootstrap": "^5.1.1",

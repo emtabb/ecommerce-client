@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/Header/Navbar";
 import constants from "../../components/constants";
 import requests from "../../components/requests";
 import OrderContent from "../../components/content/OrderContent";

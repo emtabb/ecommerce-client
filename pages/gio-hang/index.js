@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import CartContent from "../../components/content/CartContent";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/Header/Navbar";
 import cartRequest from "../../components/requests/cartRequests";
 import constants from "../../components/constants";
 import Footer from "../../components/Footer";

@@ -2,7 +2,7 @@ import React from 'react';
 
 import CreateForm from '../content/CreateForm';
 import Footer from '../components/Footer';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/Header/Navbar';
 import Sidebar from '../components/Sidebar';
 import requests from '../requests';
 import constants from '../constants';

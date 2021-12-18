@@ -30,8 +30,8 @@ const HeaderWrapper = () => {
             <div className="container">
                 <Header>
                     <Logo>
-                        <a href="https://caferunam.com" class="logo ">
-                            <img style={{maxWidth: '100px', padding: '5px 0 5px'}} class="logo-image" src="https://caferunam.com/wp-content/uploads/2019/08/logo-1.png" alt="logo" />
+                        <a href="https://caferunam.com" className="logo ">
+                            <img style={{maxWidth: '100px', padding: '5px 0 5px'}} className="logo-image" src="https://caferunam.com/wp-content/uploads/2019/08/logo-1.png" alt="logo" />
                         </a>
                     </Logo>
                     <TopBarMenuItem>

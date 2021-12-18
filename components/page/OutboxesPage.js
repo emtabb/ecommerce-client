@@ -1,6 +1,6 @@
 import React from "react";
 
-import Navbar from '../components/Navbar';
+import Navbar from '../components/Header/Navbar';
 import Sidebar from '../components/Sidebar';
 import OutboxContent from "../content/OutboxContent";
 // import axios from 'axios';

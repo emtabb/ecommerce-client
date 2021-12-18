@@ -1,4 +1,4 @@
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/Header/Navbar";
 import {Button, Card, Col, Form, InputGroup, Row} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
 import requests from "../../components/requests";

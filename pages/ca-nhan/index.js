@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import requests from "../../components/requests";
 import constants from "../../components/constants";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/Header/Navbar";
 import {Button, Card, Col, Form, Row, InputGroup} from "react-bootstrap";
 import userRequest from "../../components/requests/userRequests";
 import LoadingPage from "../../components/LoadingPage";

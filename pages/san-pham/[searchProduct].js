@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from "axios";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/Header/Navbar";
 import ProductView from "../../components/content/ProductView";
 import Head from "next/head";
 import AbstractPageFacade from "../../facade/AbstractPageFacade";

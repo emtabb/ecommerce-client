@@ -7,7 +7,7 @@ const express = require("express");
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const port = 3000;
 const production = process.env.NODE_ENV === 'production';
-const app = next({});
+const app = next({production});
 const handle = app.getRequestHandler();
 
 // const httpsOptions = {
