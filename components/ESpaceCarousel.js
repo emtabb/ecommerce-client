@@ -10,17 +10,18 @@ const advertisementAPI = "/api/advertisement";
 
 const mockAdvertisement = [
     {
-        "_id" : "",
-        "redirect" : "",
+        "_id" : "_1",
+        "redirect" : "/",
         "background" : "/gnikecoffee.jpeg",
-        "name" : "",
+        "alt" : "Cà-phê-nguyên-chất",
+        "value" : "Khuyễn mãi 100%"
     }
 ]
 
 async function loadAdvertisements(SPACE_NAME, func) {
     // const api = advertisementAPI.concat(`/get?space=${SPACE_NAME}`);
     // let response = await requests.getData(api, constants.ACCESS_TOKEN);
-    func([]);
+    func(mockAdvertisement);
 }
 
 export default function ESpaceCarousel({DEFAULT_COLOR, SPACE_NAME}) {
@@ -48,7 +49,7 @@ export default function ESpaceCarousel({DEFAULT_COLOR, SPACE_NAME}) {
                                 <a href={ad.redirect}>
                                     <Card>
                                         <Card.Img className="d-block w-100 espaceCarousel"
-                                                  src={"/blob/".concat(ad.background)}
+                                                  src={ad.background}
                                                   alt={ad.name}
                                         />
                                         {/* <CarouselCaptionComponent DEFAULT_COLOR={DEFAULT_COLOR} content={ad.value} /> */}

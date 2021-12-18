@@ -12,7 +12,6 @@ import AbstractPageFacade from "../facade/AbstractPageFacade";
 
 const {ACTION_GET_CART} = constants;
 
-
 export default function Home({loadspace, category, API, SPACE_NAME, DEFAULT_COLOR, FOOTER_CONTACT, FOOTER_ADDRESS}) {
 
     const api = API;
