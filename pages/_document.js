@@ -1,5 +1,6 @@
 import Document, {Html, Head, Main, NextScript} from 'next/document'
 import { ServerStyleSheet } from 'styled-components';
+import React from "react";
 
 export default class MyDocument extends Document {
     // static async getInitialProps(ctx) {
@@ -7,19 +8,22 @@ export default class MyDocument extends Document {
     //     return {...initialProps}
     // }
 
-    static getInitialProps({ renderPage }) {
+    static async getInitialProps(ctx) {
         // Step 1: Tạo một instance của ServerStykeSheet
         const sheet = new ServerStyleSheet();
+        const originalRenderPage = ctx.renderPage
     
         // Step 2: Nhận các styles từ component Page
-        const page = renderPage((App) => (props) =>
-          sheet.collectStyles(<App {...props} />),
-        );
+        const page = ctx.renderPage = () =>
+            originalRenderPage({
+                enhanceApp: App => props => sheet.collectStyles(<App {...props} />),
+            });
     
         // Step 3:Trình bày các css ra một thẻ <style />
         const styleTags = sheet.getStyleElement();
+        const initialProps = await Document.getInitialProps(ctx);
     
-        return { ...page, styleTags };
+        return { ...page, styleTags, ...initialProps };
     }
 
     render() {

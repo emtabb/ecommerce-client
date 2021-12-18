@@ -6,7 +6,10 @@
     "dev": "next dev -p 4000",
     "ssg": "next build && next dev",
     "build": "next build",
-    "start": "next start -p 80",
+    "build:dev" : "set NODE_ENV=development  & next build",
+    "start": "next start -p 4000",
+    "start:development": "node server.js",
+    "start:production": "NODE_ENV=production ENV=production node server.js",
     "start-prod": "next start -p 443",
     "lint": "next lint"
   },
