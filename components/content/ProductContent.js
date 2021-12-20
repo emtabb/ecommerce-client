@@ -69,34 +69,40 @@ function ProductContent(props) {
                 <div className="container">
                     <h2 style={styleProductLabel}> Sản Phẩm </h2>
                 </div>
-                <div className="mt-2 mb-2 col-12 col-md-3 col-lg-3 container">
-                    <ProductCategory categories={category} productsOrigin={products}
-                                     dimensions={dimensions}
-                                     setProductsCategory={setProductsCategory}
-                                     DEFAULT_COLOR={DEFAULT_COLOR}
-                    />
-                </div>
-                <div className="mt-2 col-12 col-md-8 col-lg-8">
-                    { category.map(_cate => {
-                        const renderProduct = productsCategory.filter(product => product.category === _cate.key);
-                        return renderProduct.length !== 0 ?
-                            (renderProduct.map(product => {
-                            return (
-                                <div key={_cate.key}>
-                                    <div className="container mb-2">
-                                        <h2><span style={styleProductCategoryLabel}>{_cate.value} </span></h2>
-                                    </div>
+                {/*<div className="mt-2 mb-2 col-12 col-md-3 col-lg-3 container">*/}
+                    {/*<ProductCategory categories={category} productsOrigin={products}*/}
+                    {/*                 dimensions={dimensions}*/}
+                    {/*                 setProductsCategory={setProductsCategory}*/}
+                    {/*                 DEFAULT_COLOR={DEFAULT_COLOR}*/}
+                    {/*/>*/}
+                {/*</div>*/}
+                <div className="mt-2 col-12">
+                    {/*{ category.map(_cate => {*/}
+                    {/*    const renderProduct = productsCategory.filter(product => product.category === _cate.key);*/}
+                    {/*    return renderProduct.length !== 0 ?*/}
+                    {/*        (*/}
+                    {/*            <div key={_cate.key} className="mb-2">*/}
+                    {/*                <div className="container">*/}
+                    {/*                    <h2><span style={styleProductCategoryLabel}> {_cate.value} </span></h2>*/}
+                    {/*                </div>*/}
+
                                     <ScrollMenu style={{height: "auto"}}>
-                                        <ProductCard api={api} cartAction={handleAddProductToCart}
-                                                     key={product._id}
-                                                     product={product}
-                                                     DEFAULT_COLOR={DEFAULT_COLOR}
-                                        />
+                                    {
+                                        productsCategory.map(product => {
+                                            return (
+                                                    <ProductCard api={api} cartAction={handleAddProductToCart}
+                                                                 key={product._id}
+                                                                 product={product}
+                                                                 DEFAULT_COLOR={DEFAULT_COLOR}
+                                                    />
+                                                    )
+                                        })
+                                    }
                                     </ScrollMenu>
-                                </div>
-                            )})) : (<div></div>)
-                        })
-                    }
+                    {/*            </div>*/}
+                    {/*        ) : (<div></div>)*/}
+                    {/*    })*/}
+                    {/*}*/}
                 </div>
             </div>
         )

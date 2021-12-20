@@ -6,13 +6,14 @@ import ESpaceCarousel from "../components/ESpaceCarousel";
 import cartRequest from "../components/requests/cartRequests";
 import Head from "next/head";
 import Footer from "../components/Footer";
+import NewsContent from "../components/content/home/NewsContent";
 import {Card} from "react-bootstrap";
 import constants from "../components/constants";
 import AbstractPageFacade from "../facade/AbstractPageFacade";
 
 const {ACTION_GET_CART} = constants;
 
-export default function Home({loadspace, category, API, SPACE_NAME, DEFAULT_COLOR, FOOTER_CONTACT, FOOTER_ADDRESS}) {
+export default function Home({loadspace, category, news, API, SPACE_NAME, DEFAULT_COLOR, FOOTER_CONTACT, FOOTER_ADDRESS}) {
 
     const api = API;
     const [productsCart, setProductsCart] = useState([]);
@@ -67,6 +68,19 @@ export default function Home({loadspace, category, API, SPACE_NAME, DEFAULT_COLO
                                             setProductsCart={handleCartData}
                             />
                         ) :
+                        (
+                            <div className="row">
+                                <div className="col-xs-12 col-12 col-md-8">
+                                    <Card className=" p-3" style={{minHeight: '18rem'}}>
+                                        <p>Không có sản phẩm</p>
+                                    </Card>
+                                </div>
+                            </div>)
+                    }
+                </div>
+                <div className="container">
+                    {news.length !== 0 ? (
+                        <NewsContent news={news} api={API} DEFAULT_COLOR={DEFAULT_COLOR}/>  ) :
                         (<div className="row">
                             <div className="col-xs-12 col-12 col-md-8">
                                 <Card className=" p-3" style={{minHeight: '18rem'}}>
@@ -91,6 +105,31 @@ export async function getServerSideProps() {
     const categoryResponse = await axios.get(`${serverData.API.concat(serverData.CATEGORY_REQUEST)}`);
     serverData.loadspace = response.data;
     serverData.category = categoryResponse.data.space;
+    const mockNews =
+        [
+            {
+                "_id" : "1",
+                "search_title" : "khong-co-gi-1",
+                "description" : "khong có gì 1",
+                "label" : "Không có gì 1",
+                "background" : "",
+            },
+            {
+                "_id" : "2",
+                "search_title" : "khong-co-gi-2",
+                "description" : "khong có gì 2",
+                "label" : "Không có gì 2",
+                "background" : "",
+            },
+            {
+                "_id" : "3",
+                "search_title" : "khong-co-gi-3",
+                "description" : "khong có gì 3",
+                "label" : "Không có gì 1",
+                "background" : "",
+            }
+        ];
+    serverData.news = mockNews;
     return {
         props: serverData
     }
