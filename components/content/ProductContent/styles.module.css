@@ -1,27 +1,4 @@
-.text-title {
-  font-size: 35px;
-  color: rgb(190, 145, 40);
-  text-align: center;
-  margin: 10px 0 50px;
 
-  position: relative;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-weight: 200;
-  position: relative;
-  padding-bottom: 20px;
-}
-.text-title::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  transform: translateX(-50%);
-  -webkit-transform: translateX(-50%);
-  width: 115px;
-  height: 2px;
-  background-color: var(--lines);
-}
 
 .text-drink {
 }
@@ -54,7 +31,7 @@
   opacity: 1;
   transition: 0.3s ease-out;
 }
-.cardImage:hover::after {
+.card:hover .cardImage::after {
   opacity: 0;
 }
 .cardImage img {
@@ -65,4 +42,14 @@
 
 .slider {
   padding: 50px 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding-bottom: 50px;
+}
+.grid>div {
+  padding-bottom: 80px;
+
 }

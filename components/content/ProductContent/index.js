@@ -70,7 +70,7 @@ function ProductContent(props) {
           };
         return (
             <div className="container mt-4">
-                <h2 className={styles['text-title']}> Sản Phẩm </h2>
+                <h2 className="text-title"> Sản Phẩm </h2>
                     <Slider {...settings} className={styles.slider}>
                     {
                         productsCategory.map(product => {
@@ -85,6 +85,19 @@ function ProductContent(props) {
                     }
                     </Slider>
 
+                    <div className={styles.grid}>
+                    {
+                        productsCategory.map(product => {
+                            return (
+                                    <ProductCard api={api} cartAction={handleAddProductToCart}
+                                                    key={product._id}
+                                                    product={product}
+                                                    DEFAULT_COLOR={DEFAULT_COLOR}
+                                    />
+                                    )
+                        })
+                    }
+                    </div>
                     
             </div>
         )

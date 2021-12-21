@@ -1,38 +1,78 @@
 .footer {
-    background-color: #303030;
-    padding: 70px 0 50px;
+  background-color: #303030;
+  padding: 70px 0 50px;
 }
 .footer * {
-    color: var(--text);
-    font-size: 16px;
-    font-size: 16px;
-    font-weight: 400;
-    letter-spacing: 1px;
-    text-align: left;
 }
 .footer ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 
 /* ---------------------------------------------------
     LOGOS
 ----------------------------------------------------- */
 #footer_c1 .logo {
-    width: 80px;
-    margin-bottom: 30px;
+  width: 80px;
+  margin-bottom: 30px;
 }
 #footer_c1 .LogoCCDVSaleNoti {
-    width: 150px;
-    margin-bottom: 30px;
+  width: 150px;
+  margin-bottom: 30px;
 }
 #footer_c1 img {
-    width: 100%;
-    height: auto;
+  width: 100%;
+  height: auto;
 }
 
-
 #footer_c1 .LogoCCDVSaleNoti img {
+}
 
+#footer_c2 h5,
+#footer_c3 h5 {
+    text-transform: uppercase;
+  color: rgb(190, 145, 40);
+  font-size: 23px;
+  font-weight: 200;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+  font-family: "Source Sans Pro", sans-serif;
+}
+
+#footer_c2 li,
+#footer_c3 li {
+  margin-bottom: 10px;
+  padding-bottom: 0px;
+  letter-spacing: 0.5px;
+  color: var(--text);
+  font-size: 16px;
+  font-size: 16px;
+  font-weight: 400;
+  text-align: left;
+}
+#footer_c1 .socials {
+  display: flex;
+  /* justify-content: space-between;
+    max-width: 150px; */
+}
+#footer_c1 i {
+  font-size: 20px;
+  color: var(--text);
+  padding: 5px 10px;
+  margin-right: 1rem;
+  border: var(--border-socials);
+}
+#footer_c2 i,
+#footer_c3 i {
+  vertical-align: text-bottom;
+}
+
+.sign-policy {
+  background-color: var(--bg);
+  padding: 30px 15px;
+}
+.sign-policy * {
+  color: #fff;
+  text-transform: uppercase;
 }
