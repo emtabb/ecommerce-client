@@ -1,3 +1,12 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+:root {
+  --text: rgb(255, 240, 215);
+  --lines: rgb(255, 240, 215);
+}
 a, a:hover, a:focus {
   color: inherit;
   text-decoration: none;

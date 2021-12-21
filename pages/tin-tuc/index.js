@@ -77,7 +77,7 @@ export default function ProductPage({loadspace, category, API, DEFAULT_COLOR, FO
                         (<div className="row">
                             <div className="col-xs-12 col-12 col-md-8">
                                 <Card className=" p-3" style={{minHeight: '18rem'}}>
-                                    <p>Không có sản phẩm</p>
+                                    <p> Hiện tại chưa có tin tức. </p>
                                 </Card>
                             </div>
                         </div>)
@@ -94,9 +94,35 @@ export default function ProductPage({loadspace, category, API, DEFAULT_COLOR, FO
 
 export async function getServerSideProps() {
     const serverData = AbstractPageFacade.initialEnvProperties();
-    const response = await axios.get(`${serverData.API}/api/loadspace/product?space=${serverData.SPACE_NAME}&pageable=release_date,-1,1,1000`);
+    const response = await axios.get(`${serverData.API}/api/news?space=${serverData.SPACE_NAME}&pageable=release_date,-1,1,1000`);
     const categoryResponse = await axios.get(`${serverData.API.concat(serverData.CATEGORY_REQUEST)}`);
-    serverData.loadspace = response.data;
+    const mockNews =
+        {
+            "space" : [
+                {
+                    "_id" : "1",
+                    "search_title" : "khong-co-gi-1",
+                    "description" : "khong có gì 1",
+                    "label" : "Không có gì 1",
+                    "background" : "",
+                },
+                {
+                    "_id" : "2",
+                    "search_title" : "khong-co-gi-2",
+                    "description" : "khong có gì 2",
+                    "label" : "Không có gì 2",
+                    "background" : "",
+                },
+                {
+                    "_id" : "3",
+                    "search_title" : "khong-co-gi-3",
+                    "description" : "khong có gì 3",
+                    "label" : "Không có gì 1",
+                    "background" : "",
+                }
+            ]
+        };
+    serverData.loadspace = mockNews;
     serverData.category = categoryResponse.data.space;
 
     return {
