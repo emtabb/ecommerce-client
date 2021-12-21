@@ -1,0 +1,38 @@
+.footer {
+    background-color: #303030;
+    padding: 70px 0 50px;
+}
+.footer * {
+    color: var(--text);
+    font-size: 16px;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    text-align: left;
+}
+.footer ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* ---------------------------------------------------
+    LOGOS
+----------------------------------------------------- */
+#footer_c1 .logo {
+    width: 80px;
+    margin-bottom: 30px;
+}
+#footer_c1 .LogoCCDVSaleNoti {
+    width: 150px;
+    margin-bottom: 30px;
+}
+#footer_c1 img {
+    width: 100%;
+    height: auto;
+}
+
+
+#footer_c1 .LogoCCDVSaleNoti img {
+
+}
