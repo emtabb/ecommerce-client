@@ -10,7 +10,7 @@ import NewsContent from "../components/content/home/NewsContent";
 import {Card} from "react-bootstrap";
 import constants from "../components/constants";
 import AbstractPageFacade from "../facade/AbstractPageFacade";
-
+import styles from "../styles/Home.module.css";
 const {ACTION_GET_CART} = constants;
 
 export default function Home({loadspace, category, news, API, SPACE_NAME, DEFAULT_COLOR, FOOTER_CONTACT, FOOTER_ADDRESS}) {
@@ -61,22 +61,24 @@ export default function Home({loadspace, category, news, API, SPACE_NAME, DEFAUL
                 }
 
                 <ESpaceCarousel SPACE_NAME={SPACE_NAME} DEFAULT_COLOR={DEFAULT_COLOR}/>
-                <div className="container">
-                    {loadspace.space.length !== 0 ? (
-                            <ProductContent category={category} api={api} products={loadspace.space}
-                                            DEFAULT_COLOR={DEFAULT_COLOR}
-                                            setProductsCart={handleCartData}
-                            />
-                        ) :
-                        (
-                            <div className="row">
-                                <div className="col-xs-12 col-12 col-md-8">
-                                    <Card className=" p-3" style={{minHeight: '18rem'}}>
-                                        <p>Không có sản phẩm</p>
-                                    </Card>
-                                </div>
-                            </div>)
-                    }
+                <div className={styles['section-wrapper']}>
+                    <div className="container">
+                        {loadspace.space.length !== 0 ? (
+                                <ProductContent category={category} api={api} products={loadspace.space}
+                                                DEFAULT_COLOR={DEFAULT_COLOR}
+                                                setProductsCart={handleCartData}
+                                />
+                            ) :
+                            (
+                                <div className="row">
+                                    <div className="col-xs-12 col-12 col-md-8">
+                                        <Card className=" p-3" style={{minHeight: '18rem'}}>
+                                            <p>Không có sản phẩm</p>
+                                        </Card>
+                                    </div>
+                                </div>)
+                        }
+                    </div>
                 </div>
                 <div className="container">
                     {news.length !== 0 ? (
