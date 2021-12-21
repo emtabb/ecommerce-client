@@ -59,7 +59,7 @@ export default function Home({loadspace, category, API, SPACE_NAME, DEFAULT_COLO
                     : (<Navbar DEFAULT_COLOR={DEFAULT_COLOR} currentProductInCart={0} />)
                 }
 
-                <ESpaceCarousel SPACE_NAME={SPACE_NAME} DEFAULT_COLOR={DEFAULT_COLOR}/>
+                <ESpaceCarousel SPACE_NAME={SPACE_NAME} DEFAULT_COLOR={DEFAULT_COLOR}></ESpaceCarousel>
                 <div className="container">
                     {loadspace.space.length !== 0 ? (
                             <ProductContent category={category} api={api} products={loadspace.space}

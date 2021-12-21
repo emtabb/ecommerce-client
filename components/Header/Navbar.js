@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { Nav } from 'react-bootstrap';
 
 import HeaderWrapper from './HeaderWrapper';
+import CoffeeMainMenu from './CoffeeMainMenu';
 
 const navbarData = [
     {
@@ -26,12 +27,17 @@ const navbarData = [
     },
 ];
 
-export const NavBar = styled.nav`
+const NavBar = styled.nav`
     height: 130px;
 `;
 
 const ThemedHeaderWrapper = styled.div`
     background-color: #fff;
+    height: 50%;
+`;
+
+const ThemedCoffeeMainMenu = styled.div`
+    background-color: #321E14;
     height: 50%;
 `;
 
@@ -52,10 +58,10 @@ function Navbar({DEFAULT_COLOR, currentProductInCart}) {
             <NavBar className={"".concat(PopulateBackgroundColor.populateBackground(DEFAULT_COLOR))}>
                 <ThemedHeaderWrapper>
                     <HeaderWrapper></HeaderWrapper>
-                    <div style={{height: '50%'}}>
-                        abcde
-                    </div>
                 </ThemedHeaderWrapper>
+                <ThemedCoffeeMainMenu>
+                    <CoffeeMainMenu></CoffeeMainMenu>
+                </ThemedCoffeeMainMenu>
                     
                 {/* <a className="navbar-brand" href="/">
                     <img src="/gnikecoffee.jpeg" style={{width: "3.5rem", height: "3.5rem"}}

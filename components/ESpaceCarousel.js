@@ -5,29 +5,49 @@ import requests from './requests';
 import constants from './constants';
 import LoadingPage from "./LoadingPage";
 import PopulateBackgroundColor from "../facade/populate/PopulateBackgroundColor";
+import styled from 'styled-components';
 
 const advertisementAPI = "/api/advertisement";
 
-const mockAdvertisement = [
-    {
-        "_id" : "_1",
-        "redirect" : "/",
-        "background" : "/gnikecoffee.jpeg",
-        "alt" : "Cà-phê-nguyên-chất",
-        "value" : "Khuyễn mãi 100%"
-    }
-]
-
-async function loadAdvertisements(SPACE_NAME, func) {
-    // const api = advertisementAPI.concat(`/get?space=${SPACE_NAME}`);
-    // let response = await requests.getData(api, constants.ACCESS_TOKEN);
-    func(mockAdvertisement);
-}
+const ThemedCarousels = styled(Carousel)`
+    background-color: black;
+`;
 
 export default function ESpaceCarousel({DEFAULT_COLOR, SPACE_NAME}) {
 
     const [loading, setLoading] = useState(false);
     const [advertisements, setAdvertisements] = useState([]);
+
+    const mockAdvertisement = [
+        {
+            "_id" : "1",
+            "redirect" : "/",
+            "bgImage": "/images/IMG_9933.jpg",
+            "alt" : "Ảnh Bìa 1",
+            "value" : "Khuyễn mãi 100%"
+        },
+        {
+            "_id" : "2",
+            "redirect" : "/",
+            "bgImage": "/images/IMG_9918.jpg",
+            "alt" : "Ảnh Gift Tết",
+            "value" : "Khuyễn mãi 100%"
+        },
+        {
+            "_id" : "3",
+            "redirect" : "/",
+            "bgImage": "/images/IMG_9864.jpg",
+            "alt" : "Ảnh Gift Tết",
+            "value" : "Khuyễn mãi 100%"
+        }
+        
+    ];
+
+    async function loadAdvertisements(SPACE_NAME, func) {
+        // const api = advertisementAPI.concat(`/get?space=${SPACE_NAME}`);
+        // let response = await requests.getData(api, constants.ACCESS_TOKEN);
+        func(mockAdvertisement);
+    }
 
     useEffect(() => {
         loadAdvertisements(SPACE_NAME, setAdvertisements).then(result => {
@@ -41,25 +61,21 @@ export default function ESpaceCarousel({DEFAULT_COLOR, SPACE_NAME}) {
 
     if (loading) {
         return (
-            <Carousel variant="dark" className="d-flex container">
-                {
-                    advertisements.map(ad => {
+            <>
+                <ThemedCarousels fade={true}>
+                    {mockAdvertisement.map( ad => {
                         return (
-                            <Carousel.Item key={ad._id} interval={2500} className="flex-fill">
-                                <a href={ad.redirect}>
-                                    <Card>
-                                        <Card.Img className="d-block w-100 espaceCarousel"
-                                                  src={ad.background}
-                                                  alt={ad.name}
-                                        />
-                                        {/* <CarouselCaptionComponent DEFAULT_COLOR={DEFAULT_COLOR} content={ad.value} /> */}
-                                    </Card>
-                                </a>
+                            <Carousel.Item interval={2500} key={ad._id}>
+                                <img
+                                    className="d-block w-100"
+                                    src={ad.bgImage}
+                                    alt={ad.alt}
+                                />
                             </Carousel.Item>
                         )
-                    })
-                }
-            </Carousel>
+                    })}
+                </ThemedCarousels>
+            </>
         )
     } else {
         return <LoadingPage />
