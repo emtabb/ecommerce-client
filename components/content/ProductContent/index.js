@@ -1,23 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import {ScrollMenu} from "react-horizontal-scrolling-menu";
 
-import util from "../util/util";
-import constants from "../constants";
-import cartRequest from "../requests/cartRequests";
+// import util from "../../util/util";
+import constants from "../../constants";
+import cartRequest from "../../requests/cartRequests";
 import ListGroup from "react-bootstrap/ListGroup";
 import {Button, Card} from "react-bootstrap";
-import LoadingPage from "../LoadingPage";
-import PopulateBackgroundColor from "../../facade/populate/PopulateBackgroundColor";
+import LoadingPage from "../../LoadingPage";
+import PopulateBackgroundColor from "../../../facade/populate/PopulateBackgroundColor";
+import styles from "./styles.module.css";
+// Import css files
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
+import Slider from "react-slick";
 const {ACTION_ADD_TO_CART} = constants;
-const styleProductLabel = {
-    borderBottom: "5px solid",
-}
-
-const styleProductCategoryLabel = {
-    borderBottom: "5px solid",
-    width: "5rem"
-}
 
 function ProductContent(props) {
     const {api, category, setProductsCart, DEFAULT_COLOR} = props;
@@ -62,54 +59,64 @@ function ProductContent(props) {
         setProductsCart(cart);
         return cart;
     }
-
+    
     if (loading) {
+        var settings = {
+            dots: false,
+            infinite: true,
+            speed: 500,
+            slidesToShow: 4,
+            slidesToScroll: 1
+          };
         return (
-            <div className="row mt-4" style={{marginBottom: "3rem"}}>
-                <div className="container">
-                    <h2 style={styleProductLabel}> Sản Phẩm </h2>
-                </div>
-                {/*<div className="mt-2 mb-2 col-12 col-md-3 col-lg-3 container">*/}
-                    {/*<ProductCategory categories={category} productsOrigin={products}*/}
-                    {/*                 dimensions={dimensions}*/}
-                    {/*                 setProductsCategory={setProductsCategory}*/}
-                    {/*                 DEFAULT_COLOR={DEFAULT_COLOR}*/}
-                    {/*/>*/}
-                {/*</div>*/}
-                <div className="mt-2 col-12">
-                    {/*{ category.map(_cate => {*/}
-                    {/*    const renderProduct = productsCategory.filter(product => product.category === _cate.key);*/}
-                    {/*    return renderProduct.length !== 0 ?*/}
-                    {/*        (*/}
-                    {/*            <div key={_cate.key} className="mb-2">*/}
-                    {/*                <div className="container">*/}
-                    {/*                    <h2><span style={styleProductCategoryLabel}> {_cate.value} </span></h2>*/}
-                    {/*                </div>*/}
+            <div className="container mt-4">
+                <h2 className={styles['text-title']}> Sản Phẩm </h2>
+                    <Slider {...settings} className={styles.slider}>
+                    {
+                        productsCategory.map(product => {
+                            return (
+                                    <ProductCard api={api} cartAction={handleAddProductToCart}
+                                                    key={product._id}
+                                                    product={product}
+                                                    DEFAULT_COLOR={DEFAULT_COLOR}
+                                    />
+                                    )
+                        })
+                    }
+                    </Slider>
 
-                                    <ScrollMenu style={{height: "auto"}}>
-                                    {
-                                        productsCategory.map(product => {
-                                            return (
-                                                    <ProductCard api={api} cartAction={handleAddProductToCart}
-                                                                 key={product._id}
-                                                                 product={product}
-                                                                 DEFAULT_COLOR={DEFAULT_COLOR}
-                                                    />
-                                                    )
-                                        })
-                                    }
-                                    </ScrollMenu>
-                    {/*            </div>*/}
-                    {/*        ) : (<div></div>)*/}
-                    {/*    })*/}
-                    {/*}*/}
-                </div>
+                    
             </div>
         )
     } else {
         return <LoadingPage/>
     }
 
+}
+
+function ProductCard(props) {
+    const {cartAction, api, product, DEFAULT_COLOR} = props;
+
+    function addProductToCard() {
+        product.purchase = 1;
+        if (cartAction(product).length !== 0) {
+            alert("Thêm sản phẩm vô thành công");
+        }
+    }
+
+    return (
+        <div className={styles.card}>
+            <div className={styles.cardImage}>
+                <img
+                        src={product.background === ""
+                            ? "/null.jpg"
+                            : `${api}/blob/${product.background}`} alt={product.description}/>
+            </div>
+            <div className={styles['text-drink']}>
+                <a href={"/san-pham/" + product.search_title}><h6 className='text-center'>{product.label}</h6></a>
+            </div>
+        </div>
+    )
 }
 
 function ProductCategory(props) {
@@ -211,48 +218,6 @@ function ProductCategory(props) {
     }
 }
 
-function ProductCard(props) {
-    const {cartAction, api, product, DEFAULT_COLOR} = props;
 
-    function addProductToCard() {
-        product.purchase = 1;
-        if (cartAction(product).length !== 0) {
-            alert("Thêm sản phẩm vô thành công");
-        }
-    }
-
-    let borderRadius = "0.5rem";
-    let cardSubStyleSheet = {
-        borderRadius: borderRadius,
-        height: "25rem",
-        width: "15rem"
-    }
-
-    let cardImageSubStyleSheet = {
-        borderRadius: borderRadius,
-        width: "100%", objectFit: "cover",
-        height: "15rem",
-    }
-
-    return (
-        <div className="d-inline-block d-flex mr-3 ml-3 card" style={cardSubStyleSheet}>
-            <img className="card-img-top"
-                 style={cardImageSubStyleSheet}
-                 src={product.background === ""
-                     ? "/null.jpg"
-                     : `${api}/blob/${product.background}`} alt={product.description}/>
-            <div className="card-body flex-fill text-center">
-                <a href={"/san-pham/" + product.search_title}><h6>{product.label}</h6></a>
-            </div>
-            <div className="card-footer">
-                <div className="text-center mb-2 w-100">
-                    <div className="form-control d-sm-none w-100">{util.beautyNumber(product.promotion)} đ</div>
-                    <div className="form-control d-none d-sm-block">Giá: {util.beautyNumber(product.promotion)} đ</div>
-                </div>
-                <button className={"form-control btn w-100 btn-".concat(DEFAULT_COLOR)} onClick={addProductToCard}>Đặt hàng</button>
-            </div>
-        </div>
-    )
-}
 
 export default ProductContent;
