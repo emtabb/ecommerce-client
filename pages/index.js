@@ -6,7 +6,8 @@ import ESpaceCarousel from "../components/ESpaceCarousel";
 import cartRequest from "../components/requests/cartRequests";
 import Head from "next/head";
 import Footer from "../components/Footer";
-import NewsContent from "../components/content/home/NewsContent";
+import NewsContent from "../components/content/NewsContent";
+import WorkTime from "../components/content/WorkTime";
 import {Card} from "react-bootstrap";
 import constants from "../components/constants";
 import AbstractPageFacade from "../facade/AbstractPageFacade";
@@ -37,16 +38,16 @@ export default function Home({loadspace, category, news, API, SPACE_NAME, DEFAUL
     return (
         <div>
             <Head>
-                <title>GNIKE COFFEE: giao tận nơi, thơm trọn từng giây.</title>
-                <meta name="title" content="GNIKE COFFEE: giao tận nơi, thơm trọn từng giây."/>
+                <title>S-Premium Coffee & Restaurant: giao tận nơi, thơm trọn từng giây.</title>
+                <meta name="title" content="S-Premium Coffee & Restaurant: giao tận nơi, thơm trọn từng giây."/>
                 <meta name="image" content="https://gnikee.com/background-store.jpg"/>
                 <meta name="description" content="Thương hiệu cà phê Việt, giao hàng tận nơi."/>
                 <meta property="og:url" content="https://gnikee.com"/>
                 <meta property="fb:app_id" content="1132734720507826"/>
                 <meta property="og:type" content="article"/>
                 <meta property="article:publisher" content="https://facebook.com/cafebinhthanh"/>
-                <meta property="og:title" content="GNIKE COFFEE: giao tận nơi, thơm trọn từng giây."/>
-                <meta property="og:site_name" content="GNIKE COFFEE: Cà phê Việt"/>
+                <meta property="og:title" content="S-Premium Coffee & Restaurant: giao tận nơi, thơm trọn từng giây."/>
+                <meta property="og:site_name" content="S-Premium Coffee & Restaurant: Cà phê Việt"/>
                 <meta property="og:description" content="Thương hiệu cà phê Việt, giao hàng tận nơi."/>
                 <meta property="og:image" content="https://gnikee.com/background-store.jpg"/>
                 <meta property="og:image:type" content="image/jpeg"/>
@@ -61,6 +62,7 @@ export default function Home({loadspace, category, news, API, SPACE_NAME, DEFAUL
                 }
 
                 <ESpaceCarousel SPACE_NAME={SPACE_NAME} DEFAULT_COLOR={DEFAULT_COLOR}/>
+                <WorkTime/>
                 <div className={styles['section-wrapper']}>
                     <div className="container">
                         {loadspace.space.length !== 0 ? (
@@ -80,17 +82,19 @@ export default function Home({loadspace, category, news, API, SPACE_NAME, DEFAUL
                         }
                     </div>
                 </div>
-                <div className="container">
-                    {news.length !== 0 ? (
-                        <NewsContent news={news} api={API} DEFAULT_COLOR={DEFAULT_COLOR}/>  ) :
-                        (<div className="row">
-                            <div className="col-xs-12 col-12 col-md-8">
-                                <Card className=" p-3" style={{minHeight: '18rem'}}>
-                                    <p>Không có sản phẩm</p>
-                                </Card>
-                            </div>
-                        </div>)
-                    }
+                <div className={styles['section-wrapper']}>
+                    <div className="container">
+                        {news.length !== 0 ? (
+                            <NewsContent news={news} api={API} DEFAULT_COLOR={DEFAULT_COLOR}/>  ) :
+                            (<div className="row">
+                                <div className="col-xs-12 col-12 col-md-8">
+                                    <Card className=" p-3" style={{minHeight: '18rem'}}>
+                                        <p>Không có sản phẩm</p>
+                                    </Card>
+                                </div>
+                            </div>)
+                        }
+                    </div>
                 </div>
             </div>
             <Footer DEFAULT_COLOR={DEFAULT_COLOR}
@@ -111,24 +115,24 @@ export async function getServerSideProps() {
         [
             {
                 "_id" : "1",
-                "search_title" : "khong-co-gi-1",
-                "description" : "khong có gì 1",
-                "label" : "Không có gì 1",
-                "background" : "",
+                "search_title" : "KHÚC BIẾN TẤU TỪ VỊ CÀ PHÊ S-PREMIUM NGUYÊN BẢN",
+                "description" : "S-Premium Restaurant vừa cho ra mắt thực đơn thức uống mới",
+                "label" : "MENU THỨC UỐNG SÁNG TẠO S-PREMIUM – KHÚC BIẾN TẤU TỪ VỊ CÀ PHÊ S-PREMIUM NGUYÊN BẢN",
+                "background" : "https://caferunam.com/wp-content/uploads/2019/12/cafe-gourmand--400x300.jpg",
             },
             {
                 "_id" : "2",
-                "search_title" : "khong-co-gi-2",
-                "description" : "khong có gì 2",
-                "label" : "Không có gì 2",
-                "background" : "",
+                "search_title" : "“ĐƠM HOA KẾT TRÁI” LƯU GIỮ TINH THUẦN NÉT VIỆT",
+                "description" : "Cà phê S-Premium đã chính thức cho ra mắt Bộ sưu tập quà tặng “Đơm Hoa Kết Trái”",
+                "label" : "CÀFÊ S-PREMIUM RA MẮT BỘ SƯU TẬP QUÀ TẶNG TẾT CANH TÝ –“ĐƠM HOA KẾT TRÁI” LƯU GIỮ TINH THUẦN NÉT VIỆT",
+                "background" : "https://images.unsplash.com/photo-1494552671665-4b5d938da5aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80",
             },
             {
                 "_id" : "3",
-                "search_title" : "khong-co-gi-3",
-                "description" : "khong có gì 3",
-                "label" : "Không có gì 1",
-                "background" : "",
+                "search_title" : "TRẢI NGHIỆM",
+                "description" : "Nằm trong chuỗi sự kiện “Trải Nghiệm Hương Vị Cà Phê S-Premium”",
+                "label" : "SỰ KIỆN TRẢI NGHIỆM HƯƠNG VỊ CAFE TẠI QUẬN 2",
+                "background" : "https://caferunam.com/wp-content/uploads/2019/09/PTAL4876-1-400x300.jpg",
             }
         ];
     serverData.news = mockNews;

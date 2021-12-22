@@ -6,10 +6,13 @@
 :root {
   --text: rgb(255, 240, 215);
   --lines: rgb(255, 240, 215);
+  --border-socials: 1px solid rgb(255, 240, 215, 0.5);
+  --description: #e0dede;
+  --bg: #43352a;
 }
 a, a:hover, a:focus {
   color: inherit;
-  text-decoration: none;
+  text-decoration: none !important;
   transition: all 0.3s;
 }
 
@@ -274,4 +277,32 @@ a.article, a.article:hover {
   0%   {transform: scale(1.0, 1.0);}
   50%  {transform: scale(1.3, 1.3);}
   100% {transform: scale(1.0, 1.0);}
+}
+
+/* ---------------------------------------------------
+    COMPONENTS STYLE
+----------------------------------------------------- */
+.text-title {
+  font-size: 35px;
+  color: rgb(190, 145, 40);
+  text-align: center;
+  margin: 10px 0 50px;
+
+  position: relative;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 200;
+  position: relative;
+  padding-bottom: 20px;
+}
+.text-title::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  width: 115px;
+  height: 2px;
+  background-color: var(--lines);
 }

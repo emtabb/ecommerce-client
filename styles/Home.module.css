@@ -1,6 +1,6 @@
 .section-wrapper {
     background-color: #43352a;
-    padding-top: 50px;
+    padding: 50px 0;
     background-image: url(https://caferunam.com/wp-content/uploads/2019/09/bg-slide3.jpg?id=2046);
-    min-height: 100vh;
+    /* min-height: 100vh; */
 }
