@@ -1,9 +1,10 @@
 import React from 'react';
 import PopulateBackgroundColor from "../../facade/populate/PopulateBackgroundColor";
 import styles from "./styles.module.css";
-import logo from "../../public/LogoSPremium.png";
 
 export default function Footer ({DEFAULT_COLOR, FOOTER_CONTACT, FOOTER_ADDRESS}) {
+    const logo = "/images/LogoSPremium.png";
+
     return (
         <>
             <footer className={`${styles.footer} ${"footer ".concat(PopulateBackgroundColor.populateFooter(DEFAULT_COLOR))}`}>

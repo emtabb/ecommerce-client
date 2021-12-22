@@ -61,7 +61,7 @@ export default function Home({loadspace, category, news, API, SPACE_NAME, DEFAUL
                     : (<Navbar DEFAULT_COLOR={DEFAULT_COLOR} currentProductInCart={0} />)
                 }
 
-                <ESpaceCarousel SPACE_NAME={SPACE_NAME} DEFAULT_COLOR={DEFAULT_COLOR}></ESpaceCarousel>
+                <ESpaceCarousel SPACE_NAME={SPACE_NAME} DEFAULT_COLOR={DEFAULT_COLOR}/>
                 <WorkTime/>
                 <div className={styles['section-wrapper']}>
                     <div className="container">
