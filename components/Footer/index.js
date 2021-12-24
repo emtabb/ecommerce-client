@@ -12,7 +12,7 @@ export default function Footer ({DEFAULT_COLOR, FOOTER_CONTACT, FOOTER_ADDRESS})
                     <div className="row">
                         <div id={styles['footer_c1']} className="col-md-3 col-sm-4">
                             <div className={styles.logo}>
-                                <img src={logo.src} alt="Logo" />
+                                <img src={logo} alt="Logo" />
                             </div>
                             <div className={styles.LogoCCDVSaleNoti}>
                                 <img src="http://online.gov.vn/Content/EndUser/LogoCCDVSaleNoti/logoSaleNoti.png" alt="" />

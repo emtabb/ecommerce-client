@@ -33,17 +33,45 @@ const HeaderBlock = styled.div`
 `;
 
 const CoffeeMainMenu = () => {
+    const navbarItems = [
+        {
+            href: "/tr-pham",
+            src: "/coffee-menu.png",
+            text: "Sản phẩm"
+        },
+        {
+            href: "/san-pham",
+            src: "/coffee-menu.png",
+            text: "Sản phẩm"
+        },
+        {
+            href: "/san-pham",
+            src: "/coffee-menu.png",
+            text: "Sản phẩm"
+        },
+        {
+            href: "/gio-hang",
+            src: "/take-away-coffee-icon.png",
+            text: "Giỏ hàng"
+        },
+        {
+            href: "/don-hang",
+            src: "/delivery-icon.png",
+            text: "Đơn hàng"
+        },
+    ];
+
     return (
         <>
             <div className="container">
                 <Header>
                     <TopBarMenuItem>
                         <HeaderBlock>
-                            <div><a href="/">TRANG CHU</a></div>
-                            <div><a href="/">VE CHUNG TOI</a></div>
-                            <div><a href="/">SAN PHAM</a></div>
-                            <div><a href="/">TIN TUC</a></div>
-                            <div><a href="/">LIEN HE</a></div>
+                            <div><a href="/">TRANG CHỦ</a></div>
+                            <div><a href="/ve-chung-toi">VỀ CHÚNG TÔI</a></div>
+                            <div><a href="/san-pham">SẢN PHẨM</a></div>
+                            <div><a href="/tin-tuc">TIN TỨC</a></div>
+                            <div><a href="/lien-he">LIÊN HỆ</a></div>
                             <IoSearchCircle></IoSearchCircle>
 
                         </HeaderBlock>

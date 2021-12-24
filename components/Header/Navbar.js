@@ -9,24 +9,6 @@ import { Nav } from 'react-bootstrap';
 import HeaderWrapper from './HeaderWrapper';
 import CoffeeMainMenu from './CoffeeMainMenu';
 
-const navbarData = [
-    {
-        href: "/san-pham",
-        src: "/coffee-menu.png",
-        text: "Sản phẩm"
-    },
-    {
-        href: "/gio-hang",
-        src: "/take-away-coffee-icon.png",
-        text: "Giỏ hàng"
-    },
-    {
-        href: "/don-hang",
-        src: "/delivery-icon.png",
-        text: "Đơn hàng"
-    },
-];
-
 const NavBar = styled.nav`
     height: 130px;
 `;
