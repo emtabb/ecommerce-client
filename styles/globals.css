@@ -9,8 +9,11 @@
   --border-socials: 1px solid rgb(255, 240, 215, 0.5);
   --description: #e0dede;
   --bg: #43352a;
+  --title: #d8ae47;
 }
-a, a:hover, a:focus {
+a,
+a:hover,
+a:focus {
   color: inherit;
   text-decoration: none !important;
   transition: all 0.3s;
@@ -48,7 +51,7 @@ a, a:hover, a:focus {
   left: 0;
   height: 100vh;
   z-index: 999;
-  background: #7386D5;
+  background: #7386d5;
   color: #fff;
   transition: all 0.3s;
 }
@@ -78,15 +81,15 @@ a, a:hover, a:focus {
   display: block;
 }
 #sidebar ul li a:hover {
-  color: #7386D5;
+  color: #7386d5;
   background: #fff;
 }
 
-#sidebar ul li.active > a, a[aria-expanded="true"] {
+#sidebar ul li.active > a,
+a[aria-expanded="true"] {
   color: #fff;
   background: #6d7fcc;
 }
-
 
 a[data-toggle="collapse"] {
   position: relative;
@@ -111,13 +114,13 @@ ul.CTAs a {
 }
 a.download {
   background: #fff;
-  color: #7386D5;
+  color: #7386d5;
 }
-a.article, a.article:hover {
+a.article,
+a.article:hover {
   background: #6d7fcc !important;
   color: #fff !important;
 }
-
 
 /* ---------------------------------------------------
     CONTENT STYLE
@@ -148,7 +151,9 @@ a.article, a.article:hover {
  */
 
 .bg-gray-100 {
-  background-color: #f7fafc;
+  background-color: #43352a;   
+  background-image: url(https://caferunam.com/wp-content/uploads/2019/09/bg-slide3.jpg?id=2046);
+
 }
 
 .bg-success-200 {
@@ -187,35 +192,35 @@ a.article, a.article:hover {
  */
 
 .bg-primary-200 {
-  background-color: #BFDBFE;
+  background-color: #bfdbfe;
 }
 
 .bg-primary-300 {
-  background-color: #93C5FD;
+  background-color: #93c5fd;
 }
 
 .bg-primary-400 {
-  background-color: #60A5FA;
+  background-color: #60a5fa;
 }
 
 .bg-primary-500 {
-  background-color: #3B82F6;
+  background-color: #3b82f6;
 }
 
 .bg-primary-600 {
-  background-color: #2563EB;
+  background-color: #2563eb;
 }
 
 .bg-primary-700 {
-  background-color: #1D4ED8;
+  background-color: #1d4ed8;
 }
 
 .bg-primary-800 {
-  background-color: #60A5FA;
+  background-color: #60a5fa;
 }
 
 .bg-primary-900 {
-  background-color: #3B82F6;
+  background-color: #3b82f6;
 }
 /* ---------------------------------------------------
     MEDIAQUERIES
@@ -239,8 +244,12 @@ a.article, a.article:hover {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .espaceCarousel {
@@ -274,9 +283,15 @@ a.article, a.article:hover {
   animation-duration: 1s;
 }
 @keyframes zoom {
-  0%   {transform: scale(1.0, 1.0);}
-  50%  {transform: scale(1.3, 1.3);}
-  100% {transform: scale(1.0, 1.0);}
+  0% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.3, 1.3);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
 }
 
 /* ---------------------------------------------------
@@ -305,4 +320,66 @@ a.article, a.article:hover {
   width: 115px;
   height: 2px;
   background-color: var(--lines);
+}
+
+/* view-button */
+.view-button {
+  margin: 50px auto;
+  width: fit-content;
+  position: relative;
+  display: block;
+  background: #48362b;
+  border: 1px solid var(--text);
+}
+.view-button > span {
+  /* z-index: 9; */
+  color: var(--text);
+  /* max-width: 100%; */
+  display: inline-block;
+  /* vertical-align: top; */
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-transform: uppercase;
+  border: 0;
+  box-shadow: 1px 2px 1px -1px #ccc;
+  padding: 10px 20px;
+  line-height: 40px;
+  text-align: center;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  transition: 0.3s;
+  position: relative;
+}
+.view-button > span:hover {
+  color: var(--text);
+}
+/*  */
+.view-button::before {
+  content: "";
+  /* z-index: -1; */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background-color: #d8ae47;
+  transition: 0.3s ease-out;
+}
+.view-button:hover::before {
+  height: 100%;
+  width: 100%;
+}
+
+/* layouts */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding-bottom: 50px;
+}
+.grid>div {
+  padding-bottom: 80px;
+}
+
+/* Link */
+Link {
+  cursor:pointer;
 }

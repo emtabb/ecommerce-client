@@ -1,5 +1,3 @@
-
-
 .text-drink {
 }
 .text-drink a {
@@ -15,10 +13,12 @@
 
 .card {
   /* height: 25rem;*/
-  width: 250px; 
+  width: 250px;
 }
 .cardImage {
   position: relative;
+  display: block;
+  cursor: pointer;
 }
 .cardImage::after {
   content: "";
@@ -44,12 +44,8 @@
   padding: 50px 0;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  padding-bottom: 50px;
-}
-.grid>div {
-  padding-bottom: 80px;
-
+.price {
+  font-size: 16px;
+  color: #fff;
+  text-align: center;
 }

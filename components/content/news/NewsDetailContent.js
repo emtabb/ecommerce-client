@@ -1,26 +1,8 @@
-import React, {useState} from 'react';
+// import React, {useState} from 'react';
 
 import {Card, Row} from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown'
-
-let borderRadius = "0.3rem"
-let cardSubStyleSheet = {
-    hover: "",
-    background: "white",
-    borderRadius: "2"
-}
-
-let cardImageSubStyleSheet = {
-    width: "100%",
-    borderRadius: borderRadius
-}
-
-// function unescapeHTML(html) {
-//     var escapeEl = document.createElement('div');
-//     escapeEl.innerHTML = html;
-//     return escapeEl;
-// }
-
+import styles from "./styles.module.css";
 function VideoComponentFrame({children}) {
     return (
         <iframe width="560" height="315" src={children} title="YouTube video player" frameBorder="0"
@@ -35,53 +17,28 @@ function VideoComponent({children}) {
 
 export default function NewsDetailContent (props) {
 
-    const {product, api} = props;
-    const features = product.features;
-
+    const {product, api, news} = props;
+    const features = news.features;
+    
     return (
-        <div className="col-xs-12 col-12 col-md-9 col-lg-9">
-            <Card className="box shadow w-100 p-3 container-fluid" style={cardSubStyleSheet}>
-                <Row>
+        <div className="col-xs-12 col-12 col-md-8 offset-md-2 col-lg-8 offset-lg-2">
+                <div className='row mb-5'>
                     <div className="col-xs-12 col-12 col-md-12">
-                        <Card.Img variant="top" style={cardImageSubStyleSheet}
-                                  src={product.background !== "" ? api.concat("/blob/", product.background) :
-                                      "https://blog.sqlauthority.com/wp-content/uploads/2007/06/null-500x259.png"}/>
-
+                        <h1 className={styles.title}>{news.label}</h1>
+                        <div className={styles.image}>
+                            <img src={news.background !== "" ?
+                                            news.background :
+                                          "https://blog.sqlauthority.com/wp-content/uploads/2007/06/null-500x259.png"}/>
+                                           {/* src={news.background !== "" ?
+                                       api.concat("/blob/", news.background) :
+                                          "https://blog.sqlauthority.com/wp-content/uploads/2007/06/null-500x259.png"} */}
+                            <span>Hình ảnh: {news.description}</span>
+                        </div> 
                     </div>
-                    {/*<div className="col-xs-12 col-12 col-md-6">*/}
-                    {/*    <h4>{product.label}</h4>*/}
-                    {/*    <div className="line"/>*/}
-                    {/*    <div className="">*/}
-                    {/*        <span className="">Giá: <h4>{util.beautyNumber(product.promotion)} đ*/}
-                    {/*            {product.price !== product.promotion*/}
-                    {/*                ? (<small><del>{util.beautyNumber(product.price)} đ</del></small>)*/}
-                    {/*                : (<></>)}</h4></span>*/}
-                    {/*    </div>*/}
-                    {/*    <div className="line"/>*/}
-                    {/*    <label>Mô tả sản phẩm: </label>*/}
-                    {/*    <div className="">*/}
-                    {/*        {product.description}*/}
-                    {/*    </div>*/}
-                    {/*    <div className="line"/>*/}
-                    {/*    <label>Số lượng</label>*/}
-                    {/*    <div className="input-group mb-3">*/}
-                    {/*        <input className="form-control" onChange={changePurchase} value={purchase} type="number"/>*/}
-                    {/*        <div className="input-group-append">*/}
-                    {/*            <span*/}
-                    {/*                className="input-group-text"> {product.unit === undefined ? "/ 1 sản phẩm" : "/ 1 " + product.unit} </span>*/}
-                    {/*        </div>*/}
-                    {/*    </div>*/}
-                    {/*    <button className="btn btn-primary" onClick={addToCart}>Đặt hàng</button>*/}
-                    {/*</div>*/}
-                    <div className="col-xs-12 col-12 col-md-12 mt-5">
-                        <Card.Body className="justify-content-center">
-                            <Card.Title align={"center"}>Thông Tin Chi Tiết</Card.Title>
-                            {/*<Card.Text>*/}
-                            {/*    {product.details}*/}
-                            {/*</Card.Text>*/}
-                            {/*<div className="line"/>*/}
-                            {/*<Card.Title align={"center"}>Mô Tả Sản Phẩm</Card.Title>*/}
-                            <Card.Text className="">
+                    
+                    <div className="col-xs-12 col-12 col-md-12 mb-5">
+                            {/* <Card.Title align={"center"}>Thông Tin Chi Tiết</Card.Title> */}
+                            <Card.Text className={styles.content}>
                                 {
                                     features ? (<Features features={features}/>) :
                                         (
@@ -89,11 +46,9 @@ export default function NewsDetailContent (props) {
                                         )
                                 }
                             </Card.Text>
-                            <div className="line"/>
-                        </Card.Body>
+                            {/* <div className="line"/> */}
                     </div>
-                </Row>
-            </Card>
+                </div>
         </div>
     )
 }

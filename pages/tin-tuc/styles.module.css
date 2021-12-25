@@ -1,0 +1,9 @@
+.news-detail {
+  margin-bottom: 100px;
+}
+.news-detail p {
+  color: var(--text);
+  text-align: justify;
+  font-size: 22px;
+  font-weight: 200;
+}

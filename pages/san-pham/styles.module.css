@@ -1,0 +1,9 @@
+.product-detail {
+    margin-bottom: 100px;
+}
+.product-detail p {
+    color: var(--text);
+    text-align: justify;
+    font-size: 22px;
+    font-weight: 200;
+}

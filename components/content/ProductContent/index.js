@@ -8,12 +8,13 @@ import ListGroup from "react-bootstrap/ListGroup";
 import {Button, Card} from "react-bootstrap";
 import LoadingPage from "../../LoadingPage";
 import PopulateBackgroundColor from "../../../facade/populate/PopulateBackgroundColor";
-import styles from "./styles.module.css";
+import Slider from "react-slick";
+import ProductCard from './ProductCard';
+
 // Import css files
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
-import Slider from "react-slick";
+import styles from "./styles.module.css";
 const {ACTION_ADD_TO_CART} = constants;
 
 function ProductContent(props) {
@@ -22,7 +23,13 @@ function ProductContent(props) {
     const [productsCategory, setProductsCategory] = useState([]);
     const [loading, setLoading] = useState(false);
     const [dimensions, setDimensions] = useState({});
-
+    const settings = {
+        dots: false,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 4,
+        slidesToScroll: 1
+      };
     function getWindowDimensions() {
         const {innerWidth: width, innerHeight: height} = window;
         return {
@@ -61,16 +68,9 @@ function ProductContent(props) {
     }
     
     if (loading) {
-        var settings = {
-            dots: false,
-            infinite: true,
-            speed: 500,
-            slidesToShow: 4,
-            slidesToScroll: 1
-          };
+        
         return (
-            <div className="container mt-4">
-                <h2 className="text-title"> Sản Phẩm </h2>
+            <div className="container">
                     <Slider {...settings} className={styles.slider}>
                     {
                         productsCategory.map(product => {
@@ -79,13 +79,14 @@ function ProductContent(props) {
                                                     key={product._id}
                                                     product={product}
                                                     DEFAULT_COLOR={DEFAULT_COLOR}
+                                                    showPrice={props.showPrice}
                                     />
                                     )
                         })
                     }
                     </Slider>
 
-                    <div className={styles.grid}>
+                    <div className="grid">
                     {
                         productsCategory.map(product => {
                             return (
@@ -98,38 +99,12 @@ function ProductContent(props) {
                         })
                     }
                     </div>
-                    
             </div>
         )
     } else {
         return <LoadingPage/>
     }
 
-}
-
-function ProductCard(props) {
-    const {cartAction, api, product, DEFAULT_COLOR} = props;
-
-    function addProductToCard() {
-        product.purchase = 1;
-        if (cartAction(product).length !== 0) {
-            alert("Thêm sản phẩm vô thành công");
-        }
-    }
-
-    return (
-        <div className={styles.card}>
-            <div className={styles.cardImage}>
-                <img
-                        src={product.background === ""
-                            ? "/null.jpg"
-                            : `${api}/blob/${product.background}`} alt={product.description}/>
-            </div>
-            <div className={styles['text-drink']}>
-                <a href={"/san-pham/" + product.search_title}><h6 className='text-center'>{product.label}</h6></a>
-            </div>
-        </div>
-    )
 }
 
 function ProductCategory(props) {

@@ -9,13 +9,16 @@ import cartRequest from "../../components/requests/cartRequests";
 import constants from "../../components/constants";
 import AbstractPageFacade from "../../facade/AbstractPageFacade";
 import NewIndexContent from "../../components/content/news/NewIndexContent";
-
+import ProductContent from "../../components/content/ProductContent";
+import homeStyles from "../../styles/Home.module.css";
+import styles from "./styles.module.css";
+import ProductCard from "../../components/content/ProductContent/ProductCard";
 const {ACTION_GET_CART} = constants;
 
 function ProductDetail() {
     return (
-        <div>
-            Càfê RuNam có các công thức pha trộn khác nhau – tuỳ thuộc vào tỉ lệ tương ứng giữa hạt Arabica, Robusta và cách rang, xay để tạo nên sự đa dạng trong phong cách và mùi vị Cà phê Việt. Tất cả các loại Càfê RuNam đều được đóng gói 250 gr để thuận tiện cho khách hàng trong việc sử dụng hoặc làm quà tặng. Giá trị của từng gói Càfê RuNam không chỉ gói gọn trong chất lượng mà còn được bộc lộ qua ý tưởng thể hiện văn hoá uống Cà phê Việt trên bao bì được tạo nên bởi hoạ sĩ Nguyễn Thành Phong và Sandrine Llouquet.
+        <div className={styles['product-detail']}>
+            <p>Càfê S-Premium có các công thức pha trộn khác nhau – tuỳ thuộc vào tỉ lệ tương ứng giữa hạt Arabica, Robusta và cách rang, xay để tạo nên sự đa dạng trong phong cách và mùi vị Cà phê Việt. Tất cả các loại Càfê RuNam đều được đóng gói 250 gr để thuận tiện cho khách hàng trong việc sử dụng hoặc làm quà tặng. Giá trị của từng gói Càfê RuNam không chỉ gói gọn trong chất lượng mà còn được bộc lộ qua ý tưởng thể hiện văn hoá uống Cà phê Việt trên bao bì được tạo nên bởi hoạ sĩ Nguyễn Thành Phong và Sandrine Llouquet.</p>            
         </div>
     )
 }
@@ -66,22 +69,25 @@ export default function ProductPage({loadspace, category, API, DEFAULT_COLOR, FO
                     ? (<Navbar DEFAULT_COLOR={DEFAULT_COLOR} currentProductInCart={productsCart.length}/>)
                     : (<Navbar DEFAULT_COLOR={DEFAULT_COLOR} currentProductInCart={0}/>)
                 }
-                <div className="container mt-3">
-                    <ProductDetail />
-                    {loadspace.space.length !== 0 ? (
-                            <NewIndexContent category={category} api={api} products={loadspace.space}
-                                                 setProductsCart={handleCartData}
-                                                 DEFAULT_COLOR={DEFAULT_COLOR}
-                            />
-                        ) :
-                        (<div className="row">
-                            <div className="col-xs-12 col-12 col-md-8">
-                                <Card className=" p-3" style={{minHeight: '18rem'}}>
-                                    <p>Không có sản phẩm</p>
-                                </Card>
-                            </div>
-                        </div>)
-                    }
+                <div  className={homeStyles['section-wrapper']}>
+                    <div className="container">
+                        <ProductDetail />
+
+                        <div className="grid">
+                        {
+                            loadspace.space.map(product => {
+                                return (
+                                        <ProductCard api={api} cartAction={ProductContent.handleAddProductToCart}
+                                                        key={product._id}
+                                                        product={product}
+                                                        DEFAULT_COLOR={DEFAULT_COLOR}
+                                                        showPrice={1}
+                                        />
+                                        )
+                            })
+                        }
+                        </div>
+                    </div>
                 </div>
                 <Footer DEFAULT_COLOR={DEFAULT_COLOR}
                         FOOTER_CONTACT={FOOTER_CONTACT}

@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 
 import LoadingPage from "../../LoadingPage";
+import NewsCard from './NewsCard';
 import styles from "./styles.module.css";
 
 function NewsContent(props) {
@@ -9,10 +10,6 @@ function NewsContent(props) {
 
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(false);
-
-    const styleNewsLabel = {
-        borderBottom: "5px solid",
-    }
 
     useEffect(() => {
         setNews(props.news);
@@ -27,9 +24,7 @@ function NewsContent(props) {
     if (loading) {
         return (
             <div className={`row ${styles.news}`} style={{marginBottom: "3rem"}}>
-                <div className="container">
-                    <h2 className='text-title'> Tin Tức </h2>
-                </div>
+                
                 
                 <div className={styles['news-content']}>
                     {
@@ -44,7 +39,6 @@ function NewsContent(props) {
                         }) : (<div className="text-center"> Chưa có tin tức </div>)
                     }
                 </div>
-               <a href='#'>xem tất cả</a>
             </div>
         )
     } else {
@@ -52,29 +46,6 @@ function NewsContent(props) {
     }
 }
 
-function NewsCard(props) {
-    const { api, product, DEFAULT_COLOR} = props;
 
-    return (
-        /**
-         * image src logic:
-         * src={product.background === ""
-         *           ? "/null.jpg"
-         *           : `${api}/blob/${product.background}`}
-         * TO DO: set back src logic above.
-         */ 
-        <div className={styles['news-item']}>
-            <div className={styles['news-img']}>
-                <img src={product.background === ""
-                         ? "/null.jpg"
-                         : product.background} alt={product.description}/>
-            </div>
-            <div className={styles['news-text']}>
-                <a href={"/tin-tuc/" + product.search_title}><h6>{product.label}</h6></a>
-                <p>{product.description}</p>
-            </div>
-        </div>
-    )
-}
 
 module.exports = NewsContent;
