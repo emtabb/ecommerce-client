@@ -66,32 +66,6 @@ function ProductIndexContent(props) {
 
     if (loading) {
         return (
-            // <div className="row" style={{marginBottom: "3rem"}}>
-            //     <div className="mb-2 mt-2 col-12 col-md-3 col-lg-3 container">
-            //         <ProductCategory categories={category} productsOrigin={products}
-            //                          dimensions={dimensions}
-            //                          setProductsCategory={setProductsCategory}
-            //                          DEFAULT_COLOR={DEFAULT_COLOR}
-            //         />
-            //     </div>
-            //     <div className="mt-2 col-12 col-md-8 col-lg-8">
-            //         <div className="container-fluid">
-            //             <div className="row">
-            //                 {
-            //                     productsCategory.length !== 0 ? productsCategory.map(product => {
-            //                         return (
-            //                             <ProductCard api={api} cartAction={handleAddProductToCart}
-            //                                          key={product._id}
-            //                                          product={product}
-            //                                          DEFAULT_COLOR={DEFAULT_COLOR}
-            //                             />
-            //                         )
-            //                     }) : (<div className="text-center"> Không có sản phẩm </div>)
-            //                 }
-            //             </div>
-            //         </div>
-            //     </div>
-            // </div>
             <div className="row mt-4" style={{marginBottom: "3rem"}}>
                 <div className="container">
                     <h2 style={styleProductLabel}> Sản Phẩm </h2>

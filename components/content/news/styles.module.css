@@ -1,0 +1,32 @@
+.title {
+    color: #dbb459;
+    font-size: 40px;
+    /* letter-spacing: 2px; */
+    text-align:justify;
+    font-weight: 400;
+    margin: 0 0 50px 0;
+    padding-bottom: 5px;
+    line-height: 1.4;
+    display: block;
+    position: relative;
+}
+.image {
+    margin: 0 auto 50px;
+    width: calc(100% - 100px);
+}
+.image img{
+    width: 100%;
+    object-fit: cover;
+}
+.image span {
+    color: var(--text);
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-align: left;
+}
+
+.content p {
+    color: var(--text);
+    font-size: 18px;
+    font-weight: 200px;
+}

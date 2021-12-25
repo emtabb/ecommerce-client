@@ -11,6 +11,7 @@ import WorkTime from "../components/content/WorkTime";
 import {Card} from "react-bootstrap";
 import constants from "../components/constants";
 import AbstractPageFacade from "../facade/AbstractPageFacade";
+import Link from "next/link";
 import styles from "../styles/Home.module.css";
 const {ACTION_GET_CART} = constants;
 
@@ -63,39 +64,32 @@ export default function Home({loadspace, category, news, API, SPACE_NAME, DEFAUL
 
                 <ESpaceCarousel SPACE_NAME={SPACE_NAME} DEFAULT_COLOR={DEFAULT_COLOR}/>
                 <WorkTime/>
-                <div className={styles['section-wrapper']}>
-                    <div className="container">
-                        {loadspace.space.length !== 0 ? (
+                {/* --- Products --- */}
+                {loadspace.space.length !== 0 ? (
+                    <div className={styles['section-wrapper']}>
+                        <div className="container">
+                                <h2 className="text-title mt-4"> Sản Phẩm </h2>
                                 <ProductContent category={category} api={api} products={loadspace.space}
                                                 DEFAULT_COLOR={DEFAULT_COLOR}
                                                 setProductsCart={handleCartData}
+                                                showPrice={0}
                                 />
-                            ) :
-                            (
-                                <div className="row">
-                                    <div className="col-xs-12 col-12 col-md-8">
-                                        <Card className=" p-3" style={{minHeight: '18rem'}}>
-                                            <p>Không có sản phẩm</p>
-                                        </Card>
-                                    </div>
-                                </div>)
-                        }
-                    </div>
-                </div>
-                <div className={styles['section-wrapper']}>
+                        </div>
+                    </div>) 
+                    : null
+                }
+                {/* --- News --- */}
+                {news.length !== 0 ? (
+                    <div className={styles['section-wrapper']}>
                     <div className="container">
-                        {news.length !== 0 ? (
-                            <NewsContent news={news} api={API} DEFAULT_COLOR={DEFAULT_COLOR}/>  ) :
-                            (<div className="row">
-                                <div className="col-xs-12 col-12 col-md-8">
-                                    <Card className=" p-3" style={{minHeight: '18rem'}}>
-                                        <p>Không có sản phẩm</p>
-                                    </Card>
-                                </div>
-                            </div>)
-                        }
+                        <h2 className='text-title'> Tin Tức </h2>
+                        <NewsContent news={news.slice(0, 3)} 
+                                    api={API} 
+                                    DEFAULT_COLOR={DEFAULT_COLOR}/> 
+                        <Link href="/tin-tuc"><a className='view-button'><span>xem tất cả</span></a></Link>
                     </div>
-                </div>
+                    </div> ) : null
+                }
             </div>
             <Footer DEFAULT_COLOR={DEFAULT_COLOR}
                     FOOTER_CONTACT={FOOTER_CONTACT}
@@ -108,6 +102,7 @@ export default function Home({loadspace, category, news, API, SPACE_NAME, DEFAUL
 export async function getServerSideProps() {
     const serverData = AbstractPageFacade.initialEnvProperties();
     const response = await axios.get(`${serverData.API}/api/loadspace/product?space=${serverData.SPACE_NAME}&pageable=release_date,-1,1,1000`);
+    console.log(response);
     const categoryResponse = await axios.get(`${serverData.API.concat(serverData.CATEGORY_REQUEST)}`);
     serverData.loadspace = response.data;
     serverData.category = categoryResponse.data.space;

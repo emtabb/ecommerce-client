@@ -4,8 +4,9 @@ import Navbar from "../../components/Header/Navbar";
 import ProductView from "../../components/content/ProductView";
 import Head from "next/head";
 import AbstractPageFacade from "../../facade/AbstractPageFacade";
+import Footer from '../../components/Footer';
 
-const ProductDetailPage = ({product, API, searchProduct}) => {
+const ProductDetailPage = ({product, API, searchProduct, FOOTER_CONTACT, FOOTER_ADDRESS}) => {
     const api = API;
     return (
         <div className="bg-gray-100">
@@ -29,14 +30,18 @@ const ProductDetailPage = ({product, API, searchProduct}) => {
             </Head>
             <div>
                 <Navbar />
-                <div className="container" >
-                    <div className="row">
+                <div className="container" style={{marginTop: "100px"}}>
+                    <div className="row mb-5">
                         {product
                             ? (<ProductView product={product} api={api} />)
                             : (<div><p>Không tìm thấy sản phẩm có sản phẩm</p></div>)
                         }
                     </div>
                 </div>
+                <Footer
+                    FOOTER_CONTACT={FOOTER_CONTACT}
+                    FOOTER_ADDRESS={FOOTER_ADDRESS}
+            />
             </div>
         </div>
     )

@@ -2,25 +2,17 @@ import React, {useState} from 'react';
 
 import {Card, Row} from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
-import constants from "../constants"
+import constants from "../../constants"
 
-import util from "../util/util";
+import util from "../../util/util";
 
-import cartRequest from "../requests/cartRequests";
-
+import cartRequest from "../../requests/cartRequests";
+import styles from './styles.module.css';
 const {ACTION_ADD_TO_CART} = constants;
 
-let borderRadius = "0.3rem"
-let cardSubStyleSheet = {
-    hover: "",
-    background: "white",
-    borderRadius: "2"
-}
 
-let cardImageSubStyleSheet = {
-    width: "100%",
-    borderRadius: borderRadius
-}
+
+
 
 // function unescapeHTML(html) {
 //     var escapeEl = document.createElement('div');
@@ -70,45 +62,57 @@ export default function ProductView(props) {
     }
 
     return (
-        <div className="col-xs-12 col-12 col-md-9 col-lg-9">
-            <Card className="box shadow w-100 p-3 container-fluid" style={cardSubStyleSheet}>
-                <Row>
+        <div className="col-xs-12 col-12 col-md-8 col-lg-8 offset-md-2 offset-lg-2">
+                <div className='row mb-5'>
                     <div className="col-xs-12 col-12 col-md-6">
-                        <Card.Img variant="top" style={cardImageSubStyleSheet}
-                                  src={product.background !== "" ? api.concat("/blob/", product.background) :
-                                      "https://blog.sqlauthority.com/wp-content/uploads/2007/06/null-500x259.png"}/>
+                        <div className={styles.image}>
+                            <img src={product.background !== "" ? api.concat("/blob/", product.background) :
+                                          "https://blog.sqlauthority.com/wp-content/uploads/2007/06/null-500x259.png"}/>
+                        </div>
 
                     </div>
                     <div className="col-xs-12 col-12 col-md-6">
-                        <h4>{product.label}</h4>
-                        <div className="line"/>
-                        <div className="">
-                            <span className="">Giá: <h4>{util.beautyNumber(product.promotion)} đ
-                                {product.price !== product.promotion
-                                    ? (<small><del>{util.beautyNumber(product.price)} đ</del></small>)
-                                    : (<></>)}</h4></span>
-                        </div>
-                        <div className="line"/>
-                        <label>Mô tả sản phẩm: </label>
-                        <div className="">
-                            {product.description}
-                        </div>
-                        <div className="line"/>
-                        <label>Số lượng</label>
-                        <div className="input-group mb-3">
-                            <input className="form-control" onChange={changePurchase} value={purchase} type="number"/>
-                            <div className="input-group-append">
-                                <span
-                                    className="input-group-text"> {product.unit === undefined ? "/ 1 sản phẩm" : "/ 1 " + product.unit} </span>
+                        <div className={styles.content}>
+                            <h4>{product.label}</h4>
+                            {/* <div className="line"/> */}
+                            
+                            {/* <div className="line"/> */}
+                            {/* <label>Mô tả sản phẩm: </label> */}
+                            <p className="">
+                                {product.description}
+                                Sử dụng 100% hạt Arabica: loại này dành cho những người yêu Cà phê thực thụ và muốn thưởng thức một ly Cà phê Arabica thuần tuý của vùng cao nguyên Việt Nam với vị chua thanh nhẹ nhàng. Cách ngon nhất để thưởng thức cà phê loại này là một tách cà phê kiểu Ý.
+                            </p>
+                            <div className={styles.price}>
+                                <span className="">GIÁ:</span> <h4>{util.beautyNumber(product.promotion)} vnđ
+                                    {product.price !== product.promotion
+                                        ? (<small><del>{util.beautyNumber(product.price)} đ</del></small>)
+                                        : (<></>)}</h4>
                             </div>
+                            {/* <div className="line"/> */}
+    
+                            {/* <label>Số lượng</label>
+                            <div className="input-group mb-3">
+                                <input className="form-control" onChange={changePurchase} value={purchase} type="number"/>
+                                <div className="input-group-append">
+                                    <span
+                                        className="input-group-text"> {product.unit === undefined ? "/ 1 sản phẩm" : "/ 1 " + product.unit} </span>
+                                </div>
+                            </div> */}
+    
+                            <button className="view-button" onClick={addToCart}><span>Đặt hàng</span></button>
                         </div>
-                        <button className="btn btn-primary" onClick={addToCart}>Đặt hàng</button>
                     </div>
-                    <div className="col-xs-12 col-12 col-md-12 mt-5">
+                    {/* <div className="col-xs-12 col-12 col-md-12 mt-5">
                         <Card.Body className="justify-content-center">
                             <Card.Title align={"center"}>Thông Tin Chi Tiết</Card.Title>
                             <Card.Text>
                                 {product.details}
+                                <ul>
+                                    <li>Thương hiệu: S-Premium</li>
+                                    <li>Xuất xứ thương hiệu: Việt Nam</li>
+                                    <li>Loại sản phẩm: Chuẩn</li>
+                                    <li>Khối lượng tổng: 330ml</li>
+                                </ul>
                             </Card.Text>
                             <div className="line"/>
                             <Card.Title align={"center"}>Mô Tả Sản Phẩm</Card.Title>
@@ -122,9 +126,8 @@ export default function ProductView(props) {
                             </Card.Text>
                             <div className="line"/>
                         </Card.Body>
-                    </div>
-                </Row>
-            </Card>
+                    </div> */}
+                </div>
         </div>
     )
 }
