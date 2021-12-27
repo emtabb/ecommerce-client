@@ -25,7 +25,11 @@ const TopBarMenuItem = styled.div`
 const HeaderBlock = styled.div`
     float: left;
     display: inline-flex;
-    width: 100%;
+    width: 63%;
+    justify-content:space-between;
+    height: 60px;
+    font-size: 18px;
+    margin-left: 94px;
 `;
 
 const HeaderWrapper = () => {
@@ -44,9 +48,9 @@ const HeaderWrapper = () => {
                     </Logo>
                     <TopBarMenuItem>
                         <HeaderBlock>
-                            <div><AiOutlineClockCircle></AiOutlineClockCircle> Thứ 2 – Thứ 7: 08:00 – 17:00</div>
-                            <div><AiFillPhone></AiFillPhone> {phoneNumber}</div>
-                            <div><AiOutlineMail></AiOutlineMail> {email}</div>
+                            <div className="d-inline-flex align-items-center"><AiOutlineClockCircle></AiOutlineClockCircle> Thứ 2 – Thứ 7: 08:00 – 17:00</div>
+                            <div className="d-inline-flex align-items-center"><AiFillPhone></AiFillPhone> {phoneNumber}</div>
+                            <div className="d-inline-flex align-items-center"><AiOutlineMail></AiOutlineMail> {email}</div>
                         </HeaderBlock>
                     </TopBarMenuItem>
                 </Header>

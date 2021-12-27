@@ -1,6 +1,8 @@
 import { IoSearchCircle } from "react-icons/io5"
 import styled from "styled-components";
 
+import {useState, useEffect} from 'react';
+
 const Header = styled.div`
     float: none;
     padding: 0;
@@ -20,24 +22,55 @@ const Logo = styled.div`
 
 const TopBarMenuItem = styled.div`
     display: inline;
+    position: absolute;
+    width: 70%;
+    height: 62px;
+    margin-left: 35px;
 `;
 
 const HeaderBlock = styled.div`
     float: left;
-    display: inline-flex;
-    width: 80%;
-    display: flex;                  /* establish flex container */
     flex-direction: row;            /* default value; can be omitted */
     flex-wrap: nowrap;              /* default value; can be omitted */
     justify-content: space-between; /* switched from default (flex-start, see below) */
+    width: 100%;
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
+`;
+
+const MenuItem = styled.a`
+    color: white;
+    &:hover {
+        color: white;
+        border-bottom: 4px double;
+    }
+    &.active {
+        border-bottom: 4px double;
+    }
 `;
 
 const CoffeeMainMenu = () => {
+
+    // const currentPath = window.location.pathname;
+    const [currentPath, setCurrentPath] = useState("");
+    useEffect(() => {
+        setCurrentPath(window.location.pathname);
+
+        return () => {
+            setCurrentPath("");
+        }
+    }, []);
     const navbarItems = [
         {
-            href: "/tr-pham",
+            href: "/",
             src: "/coffee-menu.png",
-            text: "Sản phẩm"
+            text: "Trang chủ"
+        },
+        {
+            href: "/ve-chung-toi",
+            src: "/coffee-menu.png",
+            text: "Về chúng tôi"
         },
         {
             href: "/san-pham",
@@ -45,34 +78,37 @@ const CoffeeMainMenu = () => {
             text: "Sản phẩm"
         },
         {
-            href: "/san-pham",
-            src: "/coffee-menu.png",
-            text: "Sản phẩm"
-        },
-        {
-            href: "/gio-hang",
+            href: "/tin-tuc",
             src: "/take-away-coffee-icon.png",
-            text: "Giỏ hàng"
+            text: "tin tức"
         },
         {
-            href: "/don-hang",
+            href: "/lien-he",
             src: "/delivery-icon.png",
-            text: "Đơn hàng"
+            text: "liên hệ"
         },
     ];
-
+    const isHomePage = currentPath === "" || currentPath === "/";
     return (
         <>
             <div className="container">
                 <Header>
                     <TopBarMenuItem>
                         <HeaderBlock>
-                            <div><a href="/">TRANG CHỦ</a></div>
-                            <div><a href="/ve-chung-toi">VỀ CHÚNG TÔI</a></div>
-                            <div><a href="/san-pham">SẢN PHẨM</a></div>
-                            <div><a href="/tin-tuc">TIN TỨC</a></div>
-                            <div><a href="/lien-he">LIÊN HỆ</a></div>
-                            <IoSearchCircle></IoSearchCircle>
+                            {
+                                navbarItems.map(item => {
+                                const itemPath = item.href.replace("/", "");
+                            
+                                    return (
+                                        <div>
+                                            <MenuItem className={currentPath.includes(itemPath) && item.href !== "/" ? "active" : ""} 
+                                            href={item.href}>
+                                                {item.text.toUpperCase()}
+                                            </MenuItem>
+                                        </div>
+                                    )
+                                })
+                            }
 
                         </HeaderBlock>
                     </TopBarMenuItem>
