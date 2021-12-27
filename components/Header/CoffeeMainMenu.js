@@ -99,29 +99,16 @@ const CoffeeMainMenu = () => {
                                 navbarItems.map(item => {
                                 const itemPath = item.href.replace("/", "");
                             
-                                if(isHomePage) {
                                     return (
-                                    <div>
-                                        <MenuItem className={"active"} href={item.href}>
-                                            {item.text.toUpperCase()}
-                                        </MenuItem>
-                                    </div>)
-                                } else {
-                                    return (
-                                    <div>
-                                        <MenuItem className={currentPath.includes(itemPath) && item.href !== "/" ? "active" : ""} 
-                                        href={item.href}>
-                                            {item.text.toUpperCase()}
-                                        </MenuItem>
-                                    </div>)
-                                }
+                                        <div>
+                                            <MenuItem className={currentPath.includes(itemPath) && item.href !== "/" ? "active" : ""} 
+                                            href={item.href}>
+                                                {item.text.toUpperCase()}
+                                            </MenuItem>
+                                        </div>
+                                    )
                                 })
                             }
-                            {/* <div><MenuItem className="active" href="/">TRANG CHỦ</MenuItem></div>
-                            <div><MenuItem href="/ve-chung-toi">VỀ CHÚNG TÔI</MenuItem></div>
-                            <div><MenuItem href="/san-pham">SẢN PHẨM</MenuItem></div>
-                            <div><MenuItem href="/tin-tuc">TIN TỨC</MenuItem></div>
-                            <div><MenuItem href="/lien-he">LIÊN HỆ</MenuItem></div> */}
 
                         </HeaderBlock>
                     </TopBarMenuItem>
